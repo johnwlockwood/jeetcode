@@ -13,7 +13,9 @@ func IsHappyApproach1(n int) bool {
 		if _, ok := seen[n]; ok {
 			break
 		}
-		seen[n] = struct{}{}
+		if n < 243 // a number 243 or higher will never get back to itself {
+			seen[n] = struct{}{}
+		}
 		n = getNext(n)
 
 	}
