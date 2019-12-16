@@ -35,18 +35,64 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("happyNumber called")
+		if got, want := getNext(19), 82; got != want {
+			fmt.Printf("got %v, want %v\n", got, want)
+		} else {
+			fmt.Printf("success: got %v, want %v\n", got, want)
+		}
+		fmt.Println("isHappyApproach1")
+		if got, want := isHappyApproach1(7), true; got != want {
+			fmt.Printf("got %v, want true\n", got)
+		} else {
+			fmt.Printf("success: got %v, want %v\n", got, want)
+		}
+		if got, want := isHappyApproach1(0), false; got != want {
+			fmt.Printf("got %v, want true\n", got)
+		} else {
+			fmt.Printf("success: got %v, want %v\n", got, want)
+		}
+		fmt.Println("isHappy")
 		theDigits := digits(934935)
 		if got, want := theDigits, []int{9, 1}; !reflect.DeepEqual(got, want) {
 			fmt.Printf("got %v, want %v\n", got, want)
 		} else {
 			fmt.Printf("success: got %v, want %v\n", got, want)
 		}
-		if got, want := isHappy(934935), true; got != want {
+		if got, want := isHappy(934935), false; got != want {
 			fmt.Printf("got %v, want true\n", got)
 		} else {
 			fmt.Printf("success: got %v, want %v\n", got, want)
 		}
 	},
+}
+
+func isHappyApproach1(n int) bool {
+	// a couple of examples to get started
+	// n = 7; 7**2 = 49; 4**2 + 9**2; 16+81 = 97; 81+49=130; 1+9+0=10; 1
+	// n = 116
+	seen := make(map[int]struct{})
+	for n != 1 {
+		if _, ok := seen[n]; ok {
+			break
+		}
+		seen[n] = struct{}{}
+		n = getNext(n)
+		fmt.Printf("next number: %d\n", n)
+
+	}
+	return n == 1
+}
+
+// given a number, what is the next number
+func getNext(n int) int {
+	var totalSum int
+	for n > 0 {
+		d := n % 10
+		// fmt.Printf("next digit of %d is %d\n", n, d)
+		n = n / 10
+		totalSum = totalSum + d*d
+	}
+	return totalSum
 }
 
 func isHappy(n int) bool {
