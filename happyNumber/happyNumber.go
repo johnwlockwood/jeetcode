@@ -4,6 +4,19 @@ import (
 	"math"
 )
 
+// IsHappyApproach2 detects a happy number and uses Floyd's Cycle-Finding algorithm to find a cycle
+func IsHappyApproach2(n int) bool {
+	// Floyd's cycle-finding
+	slow := n
+	fast := getNext(n)
+	for fast != 1 && slow != fast {
+		slow = getNext(slow)
+		fast = getNext(getNext(fast))
+	}
+	return fast == 1
+}
+
+// IsHappyApproach1 tells you if the number is happy or not
 func IsHappyApproach1(n int) bool {
 	// a couple of examples to get started
 	// n = 7; 7**2 = 49; 4**2 + 9**2; 16+81 = 97; 81+49=130; 1+9+0=10; 1
@@ -13,7 +26,7 @@ func IsHappyApproach1(n int) bool {
 		if _, ok := seen[n]; ok {
 			break
 		}
-		if n < 243 // a number 243 or higher will never get back to itself {
+		if n < 243 { // a number 243 or higher will never get back to itself
 			seen[n] = struct{}{}
 		}
 		n = getNext(n)

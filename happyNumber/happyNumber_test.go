@@ -31,6 +31,7 @@ func TestHappyNumber(t *testing.T) {
 	approaches := []approach{
 		{name: "IsHappyApproach1", f: IsHappyApproach1},
 		{name: "IsHappyNaive", f: IsHappyNaive},
+		{name: "IsHappyApproach2", f: IsHappyApproach2},
 	}
 	type test struct {
 		input int
