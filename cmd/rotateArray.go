@@ -37,8 +37,8 @@ to quickly create a Cobra application.`,
 		fmt.Println("rotateArray called", nums, expected)
 		nums, shift, expected = []int{1, 2, 3, 4, 5, 6, 7}, 3, []int{5, 6, 7, 1, 2, 3, 4}
 		nums, shift, expected = []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 5, []int{5, 6, 7, 8, 9, 1, 2, 3, 4}
-		nums, shift = []int{1, 2}, 1
-		nums, shift = []int{1}, 0
+		nums, shift, expected = []int{1, 2}, 1, []int{2, 1}
+		nums, shift, expected = []int{1}, 0, []int{1}
 		fmt.Println("constant attempt with ", nums)
 		rotateConstantMem(nums, shift)
 
