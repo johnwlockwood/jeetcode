@@ -65,73 +65,30 @@ func rotateWithCopy(nums []int, k int) {
 	}
 }
 
-func rotateConstantMem(nums []int, k int) {
-	// with memory O(1)
-	// swapping
-	// get k mod of array in case k > len(nums)
-	n := len(nums)
-	k = k % n
-	if k <= 0 || n < 2 {
+func reverse(nums []int, low, high int) {
+	if high <= low {
 		return
 	}
-
-	fmt.Println("real shift is ", k, "on an array sized: ", n, " loop til", n-k, " overlap ", k*2-n)
-	l := 0
-	for l < n-k {
-		for r := n - k; r < n || r == l; r++ {
-			nums[l], nums[r] = nums[r], nums[l]
-			fmt.Println("l: ", l, " r: ", r, " nums: ", nums)
-			l++
-		}
+	for l, r := low, high; l < r; l++ {
+		nums[l], nums[r] = nums[r], nums[l]
+		r--
 	}
-	// if there is an overlap
-	for k*2 > n {
-		overlap := k*2 - n
-		fmt.Println("overlap ", overlap)
-		// shift by overlap
-		k = overlap
-		for l < n-k {
-			for r := n - k; r < n || r == l; r++ {
-				nums[l], nums[r] = nums[r], nums[l]
-				fmt.Println("l: ", l, " r: ", r, " nums: ", nums)
-				l++
-			}
-		}
-	}
-	// reverse last part
+}
 
-	// by 2
-	// [1,2,3,4,5,6,7]
-	//  ^ swap	  ^
-	// [6,2,3,4,5,1,7]
-	//    ^ swap    ^
-	// [6,7,3,4,5,1,2]
-	//      ^     ^
-	// [6,7,1,4,5,3,2]
-	//        ^     ^
-	// [6,7,1,2,5,3,4]
-	//          ^ ^
-	// [6,7,1,2,3,5,4]
-	//            ^ ^
-	// [6,7,1,2,3,4,5]
-	//              ^
-
-	// by 4
-	// [1,2,3,4,5,6,7]
-	//  ^     ^
-	// [4,2,3,1,5,6,7]
-	//    ^     ^
-	// [4,5,3,1,2,6,7]
-	//      ^     ^
-	// [4,5,6,1,2,3,7]
-	//        ^     ^
-	// now reverse the overlap
-	// [4,5,6,7,2,3,1]
-	//          ^   ^
-	// [4,5,6,7,1,3,2]
-	//            ^ ^
-	// [4,5,6,7,1,2,3]
-
+func rotateConstantMem(nums []int, k int) {
+	// with memory O(1)
+	// reverse all
+	// reverse first k
+	// reverse last k
+	n := len(nums)
+	k = k % n
+	fmt.Println("")
+	reverse(nums, 0, n-1)
+	fmt.Println("reversed all ", nums)
+	reverse(nums, 0, k-1)
+	fmt.Println("first reversed ", nums)
+	reverse(nums, k, len(nums)-1)
+	fmt.Println("last reversed ", nums)
 }
 
 func init() {
