@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/spf13/cobra"
 )
@@ -39,10 +40,18 @@ to quickly create a Cobra application.`,
 		nums, shift, expected = []int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 5, []int{5, 6, 7, 8, 9, 1, 2, 3, 4}
 		nums, shift, expected = []int{1, 2}, 1, []int{2, 1}
 		nums, shift, expected = []int{1}, 0, []int{1}
+		nums, shift, expected = []int{1}, 1, []int{1}
+		nums, shift, expected = []int{1}, 1, []int{1}
+		nums, shift, expected = []int{1, 2}, 2, []int{1, 2}
+
+		nums, shift = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}, 38
+		expected = make([]int, len(nums))
+		copy(expected, nums)
+		rotateWithCopy(expected, shift)
 		fmt.Println("constant attempt with ", nums)
 		rotateConstantMem(nums, shift)
 
-		fmt.Println("rotateConstantMem shift ", shift, " called", nums, expected)
+		fmt.Println("rotateConstantMem shift ", shift, " called", nums, expected, reflect.DeepEqual(nums, expected))
 	},
 }
 
@@ -60,12 +69,13 @@ func rotateConstantMem(nums []int, k int) {
 	// with memory O(1)
 	// swapping
 	// get k mod of array in case k > len(nums)
-	if k <= 0 {
+	n := len(nums)
+	k = k % n
+	if k <= 0 || n < 2 {
 		return
 	}
-	k = k % len(nums)
-	n := len(nums)
-	fmt.Println("loop til", n-k)
+
+	fmt.Println("real shift is ", k, "on an array sized: ", n, " loop til", n-k, " overlap ", k*2-n)
 	l := 0
 	for l < n-k {
 		for r := n - k; r < n || r == l; r++ {
