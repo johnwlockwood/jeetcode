@@ -1,23 +1,24 @@
 package permutations
 
-func backtrackPractice(n, first int, nums []int, perms *[][]int) {
-	if first == n {
+func backTrackPractice(first int, nums []int, perms *[][]int) {
+	if first == len(nums) {
+		// output copy of nums
 		numsCopy := make([]int, len(nums))
 		copy(numsCopy, nums)
 		*perms = append(*perms, numsCopy)
 	} else {
-		// iterate from first to n-1, swap nums first and i, backtrack with first +1, unswap nums
-		for i := first; i < n; i++ {
+		// iterate from first to n-1; swap nums first and i; backtrack with first+1; unswap
+		for i := first; i < len(nums); i++ {
 			nums[first], nums[i] = nums[i], nums[first]
-			backtrackPractice(n, first+1, nums, perms)
+			backTrackPractice(first+1, nums, perms)
 			nums[first], nums[i] = nums[i], nums[first]
 		}
 	}
 }
 
-func permuteBacktrackPractice(nums []int) [][]int {
-	// init perms matrix
+func permuteBackTrackPractice(nums []int) [][]int {
+	// initialize matrix; backtrack with 0 and return perms
 	perms := make([][]int, 0)
-	backtrackPractice(len(nums), 0, nums, &perms)
+	backTrackPractice(0, nums, &perms)
 	return perms
 }
