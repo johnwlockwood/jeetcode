@@ -7,6 +7,8 @@ func permute(nums []int) [][]int {
 	// try the first number in every position
 	// [1, 2, 3], [2, 1, 3], [3, 2, 1]
 	// [2, 1, 3], [1, 2, 3], [1, 3, 2]
+	// I ended up finding the Heap algorithm
+	// this is the non-recursive one
 	n := len(nums)
 	pCount := fac(n) // len(nums) factorial
 	perms := make([][]int, pCount)
@@ -85,4 +87,36 @@ func permute2(nums []int) [][]int {
 		}
 	}
 	return perms
+}
+
+func permGenerate(k int, nums []int) [][]int {
+	// Heap's algorithm recursive
+
+	if k == 1 {
+		numsCopy := make([]int, len(nums))
+		copy(numsCopy, nums)
+		return [][]int{numsCopy}
+	}
+	perms := make([][]int, 0)
+	subPerms := permGenerate(k-1, nums)
+	for _, perm := range subPerms {
+		perms = append(perms, perm)
+	}
+
+	for i := 0; i < k-1; i++ {
+		if k%2 == 0 {
+			nums[i], nums[k-1] = nums[k-1], nums[i]
+		} else {
+			nums[0], nums[k-1] = nums[k-1], nums[0]
+		}
+		subPerms = permGenerate(k-1, nums)
+		for _, perm := range subPerms {
+			perms = append(perms, perm)
+		}
+	}
+	return perms
+}
+
+func permuteRecursive(nums []int) [][]int {
+	return permGenerate(len(nums), nums)
 }

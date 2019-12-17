@@ -14,6 +14,7 @@ func TestPermutations(t *testing.T) {
 	approaches := []approach{
 		{name: "permute", f: permute},
 		{name: "permute2", f: permute2},
+		{name: "permuteRecursive", f: permuteRecursive},
 	}
 	type test struct {
 		input []int
