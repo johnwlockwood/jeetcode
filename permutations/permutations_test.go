@@ -53,6 +53,10 @@ func TestPermutations(t *testing.T) {
 			input: []int{5, 6},
 			want:  permute2([]int{5, 6}),
 		},
+		{
+			input: []int{9, 8, 7, 6},
+			want:  permute2([]int{9, 8, 7, 6}),
+		},
 	}
 	for _, a := range approaches {
 
