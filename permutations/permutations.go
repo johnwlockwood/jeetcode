@@ -125,6 +125,7 @@ func backtrack(n int, nums []int, first int) [][]int {
 	if first == n {
 		numsCopy := make([]int, len(nums))
 		copy(numsCopy, nums)
+		fmt.Printf("at n: %d, first %d, nums %v\n", n, first, numsCopy)
 		return [][]int{numsCopy}
 	}
 	perms := make([][]int, 0)
