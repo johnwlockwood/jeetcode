@@ -31,6 +31,7 @@ func TestPermutations(t *testing.T) {
 		{name: "permute2", f: permute2},
 		{name: "permuteRecursive", f: permuteRecursive},
 		{name: "permuteBacktrack", f: permuteBacktrack},
+		{name: "permuteBacktrack2", f: permuteBacktrack2},
 	}
 	type test struct {
 		input []int

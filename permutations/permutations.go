@@ -99,9 +99,7 @@ func permGenerate(k int, nums []int) [][]int {
 	}
 	perms := make([][]int, 0)
 	subPerms := permGenerate(k-1, nums)
-	for _, perm := range subPerms {
-		perms = append(perms, perm)
-	}
+	perms = append(perms, subPerms...)
 
 	for i := 0; i < k-1; i++ {
 		if k%2 == 0 {
@@ -110,9 +108,7 @@ func permGenerate(k int, nums []int) [][]int {
 			nums[0], nums[k-1] = nums[k-1], nums[0]
 		}
 		subPerms = permGenerate(k-1, nums)
-		for _, perm := range subPerms {
-			perms = append(perms, perm)
-		}
+		perms = append(perms, subPerms...)
 	}
 	return perms
 }
@@ -132,9 +128,7 @@ func backtrack(n int, nums []int, first int) [][]int {
 	for i := first; i < n; i++ {
 		nums[first], nums[i] = nums[i], nums[first]
 		subPerms := backtrack(n, nums, first+1)
-		for _, perm := range subPerms {
-			perms = append(perms, perm)
-		}
+		perms = append(perms, subPerms...)
 		nums[first], nums[i] = nums[i], nums[first]
 	}
 	return perms
@@ -150,8 +144,34 @@ func permuteBacktrack(nums []int) [][]int {
 	}
 	n := len(nums)
 	subPerms := backtrack(n, nums1st, 0)
-	for _, perm := range subPerms {
-		perms = append(perms, perm)
+	perms = append(perms, subPerms...)
+	return perms
+}
+
+func backtrack2(n int, nums []int, first int, output *[][]int) {
+	if first == n {
+		numsCopy := make([]int, len(nums))
+		copy(numsCopy, nums)
+		fmt.Printf("at n: %d, first %d, nums %v\n", n, first, numsCopy)
+		*output = append(*output, numsCopy)
+	} else {
+		for i := first; i < n; i++ {
+			nums[first], nums[i] = nums[i], nums[first]
+			backtrack2(n, nums, first+1, output)
+			nums[first], nums[i] = nums[i], nums[first]
+		}
 	}
+}
+
+func permuteBacktrack2(nums []int) [][]int {
+	// this is based on the leetcode solution given
+	// init output list
+	perms := make([][]int, 0)
+	nums1st := make([]int, len(nums))
+	for i, num := range nums {
+		nums1st[i] = num
+	}
+	n := len(nums)
+	backtrack2(n, nums1st, 0, &perms)
 	return perms
 }
