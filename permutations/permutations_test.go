@@ -33,9 +33,12 @@ func TestPermutations(t *testing.T) {
 		},
 	}
 	for _, a := range approaches {
+
 		t.Run(a.name, func(t *testing.T) {
 			for _, tc := range tests {
-				if got := a.f(tc.input); !reflect.DeepEqual(got, tc.want) {
+				cleanInput := make([]int, len(tc.input))
+				copy(cleanInput, tc.input)
+				if got := a.f(cleanInput); !reflect.DeepEqual(got, tc.want) {
 					t.Errorf("got %v, want %v\n", got, tc.want)
 				}
 			}

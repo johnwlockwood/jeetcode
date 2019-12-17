@@ -28,10 +28,10 @@ func permute(nums []int) [][]int {
 			} else {
 				nums[c[i]], nums[i] = nums[i], nums[c[i]]
 			}
-			copy(perms[pi][:], nums)
+			copy(perms[pi], nums)
 			pi++
 			c[i]++
-			i = 0
+			i = 0 // reset i
 		} else {
 			c[i] = 0
 			i++
@@ -63,7 +63,7 @@ func permute2(nums []int) [][]int {
 	c := make([]int, n)
 
 	copy(perms[0], nums)
-	pi := 0
+	pi := 1 // permutation starts at 1 because the original is at the 0 location
 	i := 0
 	for i < n {
 		if c[i] < i {
@@ -78,6 +78,7 @@ func permute2(nums []int) [][]int {
 			copy(perms[pi], nums)
 			pi++
 			c[i]++
+			i = 0 //
 		} else {
 			c[i] = 0
 			i++
