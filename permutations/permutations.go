@@ -120,3 +120,37 @@ func permGenerate(k int, nums []int) [][]int {
 func permuteRecursive(nums []int) [][]int {
 	return permGenerate(len(nums), nums)
 }
+
+func backtrack(n int, nums []int, first int) [][]int {
+	if first == n {
+		numsCopy := make([]int, len(nums))
+		copy(numsCopy, nums)
+		return [][]int{numsCopy}
+	}
+	perms := make([][]int, 0)
+	for i := first; i < n; i++ {
+		nums[first], nums[i] = nums[i], nums[first]
+		subPerms := backtrack(n, nums, first+1)
+		for _, perm := range subPerms {
+			perms = append(perms, perm)
+		}
+		nums[first], nums[i] = nums[i], nums[first]
+	}
+	return perms
+}
+
+func permuteBacktrack(nums []int) [][]int {
+	// this is based on the leetcode solution given
+	// init output list
+	perms := make([][]int, 0)
+	nums1st := make([]int, len(nums))
+	for i, num := range nums {
+		nums1st[i] = num
+	}
+	n := len(nums)
+	subPerms := backtrack(n, nums1st, 0)
+	for _, perm := range subPerms {
+		perms = append(perms, perm)
+	}
+	return perms
+}
