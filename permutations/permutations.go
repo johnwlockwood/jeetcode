@@ -162,25 +162,31 @@ func makeTabs(n int) string {
 
 func swapRender(nums []int, a int, b int, before bool) string {
 	out := fmt.Sprint("[")
+	aBeforeColor, bAfterColor := color.FgLightGreen, color.FgLightGreen
+	bBeforeColor, aAfterColor := color.FgLightRed, color.FgLightRed
+	if a == b {
+		sameColor := color.FgRed
+		aBeforeColor, bAfterColor, bBeforeColor, aAfterColor = sameColor, sameColor, sameColor, sameColor
+	}
 	for i, v := range nums {
 		if i == a {
 			if before {
-				out = out + color.FgRed.Sprint(v)
+				out = out + aBeforeColor.Sprint(v)
 			} else {
-				out = out + color.FgGreen.Sprint(v)
+				out = out + aAfterColor.Sprint(v)
 			}
 		} else if i == b {
 			if before {
-				out = out + color.FgGreen.Sprint(v)
+				out = out + bBeforeColor.Sprint(v)
 			} else {
-				out = out + color.FgRed.Sprint(v)
+				out = out + bAfterColor.Sprint(v)
 			}
 		} else {
 			out = out + fmt.Sprint(v)
 		}
-		out = out + ", "
+		out = out + " "
 	}
-	out = out[:len(out)-2] + "]"
+	out = out[:len(out)-1] + "]"
 	return out
 }
 
@@ -188,26 +194,30 @@ func backtrack2(n int, nums []int, first int, output *[][]int) {
 	if first == n {
 		numsCopy := make([]int, len(nums))
 		copy(numsCopy, nums)
-		outColor := color.New(color.FgWhite, color.BgBlack)
-		fmt.Printf("%s%s == %d, %s\n", makeTabs(first+2), color.FgGreen.Render(first), n, outColor.Sprintf("nums %v ▶️", numsCopy))
+		// outColor := color.New(color.FgWhite, color.BgBlack)
+		// fmt.Printf("%s%s == %d, %s\n", makeTabs(first+2), color.FgGreen.Render(first), n, outColor.Sprintf("nums %v ▶️", numsCopy))
+		// fmt.Printf("%s%s\n", makeTabs(first+2), outColor.Sprintf("nums %v ▶️", numsCopy))
 		*output = append(*output, numsCopy)
 	} else {
-		fmt.Printf("%si from %s to %s {\t\t   🔽\n", makeTabs(first+1), color.FgRed.Render(first), color.FgRed.Render(n-1))
+		// fmt.Printf("%si from %s to %s {\t\t   🔽\n", makeTabs(first+1), color.FgRed.Render(first), color.FgRed.Render(n-1))
+		// fmt.Printf("%s {\n", makeTabs(first+1))
+
 		for i := first; i < n; i++ {
 			if i != first {
-				fmt.Printf("%sswap(nums[%s]=%s,nums[%s]=%s) ", makeTabs(first+2), color.FgGreen.Render(first), color.FgBlack.Render(nums[first]), color.FgRed.Render(i), color.FgBlack.Render(nums[i]))
+				fmt.Printf("%s", makeTabs(first+2))
+				// fmt.Printf("%sswap(nums[%s]=%s,nums[%s]=%s) ", makeTabs(first+2), color.FgGreen.Render(first), color.FgBlack.Render(nums[first]), color.FgRed.Render(i), color.FgBlack.Render(nums[i]))
 				fmt.Printf("%s -> ", swapRender(nums, first, i, true))
 			} else {
-				fmt.Printf("%sno swap   %s\t    %s\n", makeTabs(first+2), color.FgGreen.Render(first), color.FgRed.Render(i))
+				fmt.Printf("%s%s -> ", makeTabs(first+2), swapRender(nums, first, i, true))
+				// fmt.Printf("%sno swap   %s\t    %s\n", makeTabs(first+2), color.FgGreen.Render(first), color.FgRed.Render(i))
 			}
 			nums[first], nums[i] = nums[i], nums[first]
-			if i != first {
-				fmt.Printf("%s\n", swapRender(nums, first, i, false))
-			}
+			fmt.Printf("%s\n", swapRender(nums, first, i, false))
+
 			backtrack2(n, nums, first+1, output)
 			nums[first], nums[i] = nums[i], nums[first]
 		}
-		fmt.Printf("%s}\n", makeTabs(first+1))
+		// fmt.Printf("%s}\n", makeTabs(first+1))
 	}
 }
 
