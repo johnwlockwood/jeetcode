@@ -6,23 +6,22 @@ func countPrimes(n int) int {
 	if n < 2 {
 		return 0
 	}
-	// make sieve
+	// init primes sieve
 	isPrime := make([]bool, n)
 	for i := range isPrime {
 		isPrime[i] = true
 	}
-	// p starts at 2 and while the sqrt of n is > p which is same as p*p<=n; increment p
+	// from 2 to sqrt of n
 	for p := 2; p*p <= n; p++ {
 		if !isPrime[p] {
 			continue
 		}
-		// j starts at p * p 2*2=4 3*3=9, 4*4=16
+		// for 2p to n increment by p, mark as not prime
 		for j := p * p; j < n; j = j + p {
 			isPrime[j] = false
 		}
 	}
 	var count int
-	// iterate from 2 to n-1, if i is a prime, count it
 	for i := 2; i < n; i++ {
 		if isPrime[i] {
 			count++
