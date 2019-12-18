@@ -6,20 +6,6 @@ import (
 	"testing"
 )
 
-type Perms [][3]int
-
-func (m Perms) Len() int { return len(m) }
-func (m Perms) Less(i, j int) bool {
-	for x := range m[i] {
-		if m[i][x] == m[j][x] {
-			continue
-		}
-		return m[i][x] < m[j][x]
-	}
-	return false
-}
-func (m Perms) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
-
 func TestPermutations(t *testing.T) {
 	type funcType = func(nums []int) [][]int
 	type approach struct {
