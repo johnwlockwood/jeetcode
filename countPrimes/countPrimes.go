@@ -6,28 +6,25 @@ func countPrimes(n int) int {
 	if n < 2 {
 		return 0
 	}
+	// make sieve
 	isPrime := make([]bool, n)
-	for i := 2; i < n; i++ {
+	for i := range isPrime {
 		isPrime[i] = true
 	}
 	for p := 2; p*p <= n; p++ {
-		if isPrime[p] {
-			// fmt.Printf("p %v\n", p)
-			for j := p * p; j < n; j = j + p {
-				// fmt.Printf("\tj %v\n", j)
-				isPrime[j] = false
-			}
+		if !isPrime[p] {
+			continue
+		}
+		for j := p * p; j < n; j = j + p {
+			isPrime[j] = false
 		}
 	}
 	var count int
-	// fmt.Printf("\ncount primes below %d   %v\n", n, isPrime)
 	for i := 2; i < n; i++ {
 		if isPrime[i] {
-			// fmt.Printf("%d ", i)
 			count++
 		}
 	}
-	// fmt.Println("")
 	return count
 }
 
