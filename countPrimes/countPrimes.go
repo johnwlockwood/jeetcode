@@ -4,7 +4,7 @@ package countPrimes
 
 func countPrimes(n int) int {
 	var count int
-	for i := 2; i <= n; i++ {
+	for i := 2; i < n; i++ {
 		if isPrime(i) {
 			count++
 		}

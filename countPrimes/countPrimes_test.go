@@ -22,15 +22,19 @@ func TestIsPrime(t *testing.T) {
 			want:  true,
 		},
 		{
-			input: 4,
-			want:  false,
-		},
-		{
 			input: 3,
 			want:  true,
 		},
 		{
+			input: 4,
+			want:  false,
+		},
+		{
 			input: 6,
+			want:  false,
+		},
+		{
+			input: 10,
 			want:  false,
 		},
 		{
@@ -65,6 +69,10 @@ func TestCountPrimes(t *testing.T) {
 		},
 		{
 			input: 2,
+			want:  0,
+		},
+		{
+			input: 3,
 			want:  1,
 		},
 		{
@@ -72,25 +80,29 @@ func TestCountPrimes(t *testing.T) {
 			want:  2,
 		},
 		{
-			input: 3,
-			want:  2,
-		},
-		{
 			input: 6,
 			want:  3,
 		},
 		{
+			input: 10,
+			want:  4,
+		},
+		{
 			input: 11,
-			want:  5,
+			want:  4,
 		},
 		{
 			input: 37,
+			want:  11,
+		},
+		{
+			input: 38,
 			want:  12,
 		},
 	}
 	for _, tc := range tests {
 		if got := countPrimes(tc.input); got != tc.want {
-			t.Errorf("is %d prime. got %v, want %v\n", tc.input, got, tc.want)
+			t.Errorf("primes below %d. got %v, want %v\n", tc.input, got, tc.want)
 		}
 	}
 }
