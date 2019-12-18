@@ -2,11 +2,21 @@ package diagonal
 
 import "fmt"
 
+// Given a matrix of numbers
+// return a list of the diagonals
 //  nums [
 //  [ 1, 2, 3 ],
 //  [ 4, 5, 6 ],
 //  [ 7, 8, 9 ],
 //  ]
+// needs to return
+// [
+// [1],
+// [2, 4],
+// [3, 5, 7],
+// [6, 8],
+// [9]
+// [
 // nums[i][j], increment i, decrement j
 
 func getDiagonals(nums [][]int) ([][]int, error) {
