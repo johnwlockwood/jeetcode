@@ -16,7 +16,7 @@ func countPrimes(n int) int {
 		if !isPrime[p] {
 			continue
 		}
-		// for 2p to n increment by p, mark as not prime
+		// for p**2 to n increment by p, mark as not prime
 		for j := p * p; j < n; j = j + p {
 			isPrime[j] = false
 		}
