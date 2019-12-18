@@ -1,6 +1,9 @@
 package countPrimes
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestIsPrime(t *testing.T) {
 	type test struct {
@@ -49,6 +52,45 @@ func TestIsPrime(t *testing.T) {
 	for _, tc := range tests {
 		if got := isPrime(tc.input); got != tc.want {
 			t.Errorf("is %d prime. got %v, want %v\n", tc.input, got, tc.want)
+		}
+	}
+}
+
+func TestMakeSieve(t *testing.T) {
+	type test struct {
+		input int
+		want  []int
+	}
+	tests := []test{
+		{
+			input: 1,
+			want:  []int{},
+		},
+		{
+			input: 2,
+			want:  []int{},
+		},
+		{
+			input: 3,
+			want:  []int{2},
+		},
+		{
+			input: 4,
+			want:  []int{2, 3},
+		},
+		{
+			input: 6,
+			want:  []int{2, 3, 5},
+		},
+		{
+			input: 10,
+			want:  []int{2, 3, 5, 7},
+		},
+	}
+
+	for _, tc := range tests {
+		if got := makeSieve(tc.input); !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("primes below %d. got %v, want %v\n", tc.input, got, tc.want)
 		}
 	}
 }
