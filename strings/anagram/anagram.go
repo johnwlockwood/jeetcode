@@ -4,6 +4,24 @@ func isAnagram(s string, t string) bool {
 	if len(s) != len(t) {
 		return false
 	}
+	counter := make([]int, 26)
+	for i := 0; i < len(s); i++ {
+		counter[s[i]-'a']++
+		counter[t[i]-'a']--
+	}
+	for _, count := range counter {
+		if count != 0 {
+			return false
+		}
+	}
+	return true
+}
+
+// naive approach seems like many have given similar answer
+func isAnagramNaive(s string, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
 	// count each rune
 	countS := make(map[rune]int, len(s))
 	for _, v := range s {
@@ -22,11 +40,8 @@ func isAnagram(s string, t string) bool {
 		}
 	}
 	for k, cs := range countS {
-		if ct, ok := countT[k]; ok {
-			if cs != ct {
-				return false
-			}
-		} else {
+		ct, ok := countT[k]
+		if !ok || ct != cs {
 			return false
 		}
 	}
