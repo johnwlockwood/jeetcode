@@ -28,3 +28,19 @@ func findDisappearedNumbers(nums []int) []int {
 	// return only the part of the array with the disappeared values
 	return nums[:outI]
 }
+
+func findDisappearedNumbersBitmask(nums []int) []int {
+	// find missing values with a bit mask. only works if nums < 64
+	// memory still grows O(n) because 1 bit per n
+	d := make([]int, 0)
+	var bitMask uint
+	for _, v := range nums {
+		bitMask |= (1 << uint(v))
+	}
+	for i := 1; i <= len(nums); i++ {
+		if (bitMask & (1 << uint(i))) == 0 {
+			d = append(d, i)
+		}
+	}
+	return d
+}
