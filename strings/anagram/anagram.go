@@ -1,6 +1,6 @@
 package anagram
 
-func isAnagram(s string, t string) bool {
+func isAnagramLowerCaseAlphabet(s string, t string) bool {
 	if len(s) != len(t) {
 		return false
 	}

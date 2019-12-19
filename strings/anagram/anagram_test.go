@@ -2,7 +2,7 @@ package anagram
 
 import "testing"
 
-func TestIsAnagram(t *testing.T) {
+func TestIsAnagramLowerCaseAlphabet(t *testing.T) {
 	type test struct {
 		inputS string
 		inputT string
@@ -27,7 +27,7 @@ func TestIsAnagram(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		if got := isAnagram(tc.inputS, tc.inputT); got != tc.want {
+		if got := isAnagramLowerCaseAlphabet(tc.inputS, tc.inputT); got != tc.want {
 			t.Errorf("is %s anagram of %s? got %v, want %v\n", tc.inputS, tc.inputT, got, tc.want)
 		}
 	}
