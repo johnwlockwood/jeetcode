@@ -9,11 +9,11 @@ func findDisappearedNumbers(nums []int) []int {
 	for _, v := range nums {
 		if v < 0 {
 			if nums[-1*v-1] > 0 {
-				nums[-1*v-1] = -1 * nums[-1*v-1]
+				nums[-1*v-1] *= -1
 			}
 		} else {
 			if nums[v-1] > 0 {
-				nums[v-1] = -1 * nums[v-1]
+				nums[v-1] *= -1
 			}
 		}
 	}
