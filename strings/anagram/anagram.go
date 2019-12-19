@@ -18,6 +18,7 @@ func isAnagram(s string, t string) bool {
 }
 
 // naive approach seems like many have given similar answer
+// This approach is how to do it to include unicode
 func isAnagramNaive(s string, t string) bool {
 	if len(s) != len(t) {
 		return false
