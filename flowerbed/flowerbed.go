@@ -56,3 +56,39 @@ func canPlaceFlowers(flowerbed []int, n int) bool {
 	fmt.Printf("\t\t\t\t%d free\n", freePlots)
 	return n <= freePlots
 }
+
+// Do it in a single pass
+func canPlaceFlowersSinglePass(flowerbed []int, n int) bool {
+	freePlots := 0
+	lf := len(flowerbed)
+	for i := 0; i < lf; i++ {
+		prevNoBlock := (i == 0 || flowerbed[i-1] == 0)
+		nextNoBlock := (i == lf-1 || flowerbed[i+1] == 0)
+		currEmpty := flowerbed[i] == 0
+		if currEmpty && prevNoBlock && nextNoBlock {
+			flowerbed[i] = 1
+			freePlots++
+		}
+	}
+	return freePlots >= n
+}
+
+// Do it in a single pass, no changes to input
+func canPlaceFlowersNoChanges(flowerbed []int, n int) bool {
+	freePlots := 0
+	lf := len(flowerbed)
+	lp := 0
+	for i := 0; i < lf; i++ {
+		prevNoBlock := (i == 0 || (flowerbed[i-1] == 0 && lp != i-1) || lp < i-1)
+		nextNoBlock := (i == lf-1 || flowerbed[i+1] == 0)
+		currEmpty := flowerbed[i] == 0
+		if currEmpty && prevNoBlock && nextNoBlock {
+			lp = i
+			freePlots++
+		} else if !currEmpty {
+			lp = i
+		}
+
+	}
+	return freePlots >= n
+}
