@@ -1,6 +1,10 @@
 package subtree
 
-import "github.com/johnwlockwood/jeetcode/bintree"
+import (
+	"strings"
+
+	"github.com/johnwlockwood/jeetcode/bintree"
+)
 
 func isEqual(x *bintree.TreeNode, y *bintree.TreeNode) bool {
 	if x == nil && y == nil {
@@ -17,4 +21,10 @@ func traverse(s *bintree.TreeNode, t *bintree.TreeNode) bool {
 }
 func isSubtree(s *bintree.TreeNode, t *bintree.TreeNode) bool {
 	return traverse(s, t)
+}
+
+func isSubtreeWithPreOrder(s *bintree.TreeNode, t *bintree.TreeNode) bool {
+	sS := bintree.PreOrder(s)
+	sT := bintree.PreOrder(t)
+	return strings.Contains(sS, sT)
 }

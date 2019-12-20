@@ -1,5 +1,7 @@
 package bintree
 
+import "fmt"
+
 // TreeNode is a node in a binary tree
 type TreeNode struct {
 	Val   int
@@ -16,4 +18,16 @@ func GetVals(root *TreeNode) []int {
 	vals = append(vals, GetVals(root.Left)...)
 	vals = append(vals, GetVals(root.Right)...)
 	return vals
+}
+
+// PreOrder builds a string representation of the Tree
+func PreOrder(root *TreeNode) string {
+	s := ""
+	if root == nil {
+		return "nil "
+	}
+	s += PreOrder(root.Left)
+	s += PreOrder(root.Right)
+	s += fmt.Sprintf("%d ", root.Val)
+	return s
 }
