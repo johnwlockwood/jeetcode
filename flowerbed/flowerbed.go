@@ -2,6 +2,10 @@ package flowerbed
 
 import "fmt"
 
+// w/o printing:
+// Runtime: 12 ms, faster than 99.05% of Go online submissions for Can Place Flowers.
+// Memory Usage: 5.9 MB, less than 100.00% of Go online submissions for Can Place Flowers.
+
 func canPlaceFlowers(flowerbed []int, n int) bool {
 	// mark existing flowers as -1
 	// plant flowers in even spots which are >0
