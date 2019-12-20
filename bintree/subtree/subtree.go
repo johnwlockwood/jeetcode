@@ -1,6 +1,7 @@
 package subtree
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/johnwlockwood/jeetcode/bintree"
@@ -24,7 +25,9 @@ func isSubtree(s *bintree.TreeNode, t *bintree.TreeNode) bool {
 }
 
 func isSubtreeWithPreOrder(s *bintree.TreeNode, t *bintree.TreeNode) bool {
-	sS := bintree.PreOrder(s)
-	sT := bintree.PreOrder(t)
+	sS := bintree.PreOrder(s, true)
+	sT := bintree.PreOrder(t, true)
+	fmt.Println(sS)
+	fmt.Println(sT)
 	return strings.Contains(sS, sT)
 }

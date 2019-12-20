@@ -21,13 +21,14 @@ func GetVals(root *TreeNode) []int {
 }
 
 // PreOrder builds a string representation of the Tree
-func PreOrder(root *TreeNode) string {
-	s := ""
+func PreOrder(root *TreeNode, left bool) string {
 	if root == nil {
-		return "nil "
+		if left {
+			return "lnil"
+		} else {
+			return "rnil"
+		}
 	}
-	s += PreOrder(root.Left)
-	s += PreOrder(root.Right)
-	s += fmt.Sprintf("%d ", root.Val)
+	s := fmt.Sprintf("#%d %s %s", root.Val, PreOrder(root.Left, true), PreOrder(root.Right, false))
 	return s
 }
