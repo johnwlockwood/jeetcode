@@ -35,7 +35,13 @@ func checkPossibility(nums []int) bool {
 				}
 			} else if i != len(nums)-1 && nums[i+1] < nums[i] {
 				fmt.Println("case 3")
-				nums[i+1] = nums[i]
+				if nums[i-1] < nums[i+1] {
+					fmt.Println("case 3.1")
+					nums[i] = nums[i-1]
+				} else {
+					fmt.Println("case 3.2")
+					nums[i+1] = nums[i]
+				}
 			} else {
 				fmt.Println("case final")
 			}
