@@ -21,6 +21,14 @@ func TestCheckPossibility(t *testing.T) {
 			input: []int{3, 4, 2, 3},
 			want:  false,
 		},
+		{
+			input: []int{2, 3, 3, 2, 4},
+			want:  true,
+		},
+		{
+			input: []int{2, 3, 3, 2, 4, 4},
+			want:  true,
+		},
 	}
 
 	for _, tc := range tests {
