@@ -4,6 +4,8 @@ import (
 	"github.com/johnwlockwood/jeetcode/bintree"
 )
 
+// easy problem
+
 // Example 1
 // Input:
 // 	Tree 1                     Tree 2

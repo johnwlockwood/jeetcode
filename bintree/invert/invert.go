@@ -4,6 +4,8 @@ import (
 	"github.com/johnwlockwood/jeetcode/bintree"
 )
 
+// easy problem
+
 func invertTree(root *bintree.TreeNode) *bintree.TreeNode {
 	if root == nil {
 		return nil

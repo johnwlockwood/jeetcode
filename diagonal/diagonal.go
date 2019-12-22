@@ -2,6 +2,8 @@ package diagonal
 
 import "fmt"
 
+// easy problem
+
 // Given a matrix of numbers
 // return a list of the diagonals
 //  nums [

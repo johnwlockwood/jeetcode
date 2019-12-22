@@ -1,5 +1,7 @@
 package anagram
 
+// easy problem
+
 func isAnagramLowerCaseAlphabet(s string, t string) bool {
 	if len(s) != len(t) {
 		return false

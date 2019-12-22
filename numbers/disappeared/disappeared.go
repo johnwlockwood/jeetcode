@@ -2,6 +2,8 @@ package disappeared
 
 import "math"
 
+// easy problem
+
 func findDisappearedNumbers(nums []int) []int {
 	// the index is a place to store information
 	// if the value is negative, it is marked as seen at that index

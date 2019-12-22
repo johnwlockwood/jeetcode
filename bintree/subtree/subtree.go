@@ -6,6 +6,8 @@ import (
 	"github.com/johnwlockwood/jeetcode/bintree"
 )
 
+// easy problem
+
 func isEqual(x *bintree.TreeNode, y *bintree.TreeNode) bool {
 	if x == nil && y == nil {
 		return true

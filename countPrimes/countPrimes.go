@@ -1,5 +1,7 @@
 package countPrimes
 
+// easy problem
+
 // Count the number of prime numbers less than a non-negative number, n.
 
 func countPrimes(n int) int {

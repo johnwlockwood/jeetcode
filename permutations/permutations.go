@@ -6,6 +6,8 @@ import (
 	"github.com/gookit/color"
 )
 
+// medium problem
+
 func permute(nums []int) [][]int {
 	// some examples of permutations of [ 1, 2, 3]
 	// try the first number in every position

@@ -4,6 +4,8 @@ import (
 	"math"
 )
 
+// easy problem
+
 // IsHappyApproach2 detects a happy number and uses Floyd's Cycle-Finding algorithm to find a cycle
 func IsHappyApproach2(n int) bool {
 	// Floyd's cycle-finding

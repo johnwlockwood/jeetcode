@@ -2,6 +2,8 @@ package isomorphicStrings
 
 import "fmt"
 
+// easy problem
+
 // Isomorphic Strings
 // Given two strings s and t, determine if they are isomorphic
 // no two characters may map to the same character

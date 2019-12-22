@@ -2,6 +2,8 @@ package flowerbed
 
 import "fmt"
 
+// easy problem
+
 // w/o printing:
 // Runtime: 12 ms, faster than 99.05% of Go online submissions for Can Place Flowers.
 // Memory Usage: 5.9 MB, less than 100.00% of Go online submissions for Can Place Flowers.

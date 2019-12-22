@@ -2,6 +2,8 @@ package nondecreasing
 
 import "fmt"
 
+// easy problem
+
 // naive attempt
 func checkPossibility(nums []int) bool {
 	if len(nums) == 1 {
