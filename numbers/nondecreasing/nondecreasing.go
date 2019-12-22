@@ -54,11 +54,13 @@ func checkPossibility(nums []int) bool {
 
 // Use the approach locate and analyze problem index
 func checkPossibilityLocateAnalyze(nums []int) bool {
+	// locate the problem index
 	wasPSet := false
 	p := -1
 	for i := 0; i < len(nums)-1; i++ {
 		if nums[i] > nums[i+1] {
 			if p >= 0 {
+				// if there is a second problem index, it cannot work.
 				return false
 			}
 			wasPSet = true
