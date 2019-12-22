@@ -1,4 +1,4 @@
-package happyNumber
+package happy
 
 import (
 	"math"

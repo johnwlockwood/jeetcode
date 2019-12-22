@@ -18,7 +18,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/johnwlockwood/jeetcode/happyNumber"
+	"github.com/johnwlockwood/jeetcode/numbers/happy"
 	"github.com/spf13/cobra"
 )
 
@@ -34,18 +34,18 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("IsHappyApproach1")
-		if got, want := happyNumber.IsHappyApproach1(7), true; got != want {
+		if got, want := happy.IsHappyApproach1(7), true; got != want {
 			fmt.Printf("got %v, want true\n", got)
 		} else {
 			fmt.Printf("success: got %v, want %v\n", got, want)
 		}
-		if got, want := happyNumber.IsHappyApproach1(0), false; got != want {
+		if got, want := happy.IsHappyApproach1(0), false; got != want {
 			fmt.Printf("got %v, want true\n", got)
 		} else {
 			fmt.Printf("success: got %v, want %v\n", got, want)
 		}
 		fmt.Println("isHappy")
-		if got, want := happyNumber.IsHappyNaive(934935), false; got != want {
+		if got, want := happy.IsHappyNaive(934935), false; got != want {
 			fmt.Printf("got %v, want true\n", got)
 		} else {
 			fmt.Printf("success: got %v, want %v\n", got, want)

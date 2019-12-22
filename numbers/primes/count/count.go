@@ -1,4 +1,4 @@
-package countPrimes
+package count
 
 // easy problem
 
