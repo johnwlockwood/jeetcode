@@ -2,6 +2,7 @@ package nondecreasing
 
 import "fmt"
 
+// naive attempt
 func checkPossibility(nums []int) bool {
 	if len(nums) == 1 {
 		return true
@@ -49,4 +50,20 @@ func checkPossibility(nums []int) bool {
 		}
 	}
 	return count <= 1
+}
+
+// Use the approach locate and analyze problem index
+func checkPossibilityLocateAnalyze(nums []int) bool {
+	wasPSet := false
+	p := -1
+	for i := 0; i < len(nums)-1; i++ {
+		if nums[i] > nums[i+1] {
+			if p >= 0 {
+				return false
+			}
+			wasPSet = true
+			p = i
+		}
+	}
+	return wasPSet == false || p == 0 || p == len(nums)-2 || nums[p-1] <= nums[p+1] || nums[p] <= nums[p+2]
 }
