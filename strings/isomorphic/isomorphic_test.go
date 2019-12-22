@@ -1,4 +1,4 @@
-package isomorphicStrings
+package isomorphic
 
 import (
 	"testing"
