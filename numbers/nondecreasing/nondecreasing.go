@@ -65,5 +65,11 @@ func checkPossibilityLocateAnalyze(nums []int) bool {
 			p = i
 		}
 	}
+	// correcting in one change is possible if:
+	// no problem index or
+	// or p is the first index or
+	// p is the next to last index
+	// or the adjacent numbers before and after are non-decreasing
+	// or the number is not more than two numbers ahead
 	return wasPSet == false || p == 0 || p == len(nums)-2 || nums[p-1] <= nums[p+1] || nums[p] <= nums[p+2]
 }
