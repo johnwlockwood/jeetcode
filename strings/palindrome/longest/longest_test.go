@@ -145,6 +145,10 @@ func TestLongestPalindrome(t *testing.T) {
 
 	tests := []test{
 		{
+			input: "bananas",
+			want:  "anana",
+		},
+		{
 			input: "babad",
 			want:  "bab",
 		},
