@@ -4,6 +4,8 @@ import "math"
 
 // Runtime: 1328 ms, faster than 5.11% of Go online submissions for Container With Most Water.
 // Memory Usage: 5.6 MB, less than 46.67% of Go online submissions for Container With Most Water.
+// https://leetcode.com/problems/container-with-most-water/submissions/
+// https://leetcode.com/submissions/detail/288017693/
 
 func maxArea(height []int) int {
 	// for each value from the right to the left, calc area = min(ni, nj)*(j-i)
