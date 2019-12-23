@@ -21,14 +21,6 @@ func expandFromCenter(s string, first, last int) (int, int) {
 	return prev + 1, next - 1
 }
 
-func constructPalindrome(s string, first int) (int, int) {
-	// find the center then expand
-	fmt.Printf("%s at %d\n", s, first)
-	last := findCenter(s, first)
-	first, last = expandFromCenter(s, first, last)
-	return first, last
-}
-
 // without print statements:
 // Runtime: 0 ms, faster than 100.00% of Go online submissions for Longest Palindromic Substring.
 // Memory Usage: 2.2 MB, less than 100.00% of Go online submissions for Longest Palindromic Substring.
