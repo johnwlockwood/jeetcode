@@ -6,6 +6,7 @@ func findCenter(s string, first int) int {
 	last := first
 	for last < len(s) {
 		if s[first] != s[last] {
+			// the previous last is the end
 			return last - 1
 		} else if last == len(s)-1 {
 			return last
@@ -50,7 +51,18 @@ func constructPalindrome(s string, first int) (int, int) {
 }
 
 func longestPalindrome(s string) string {
-	// locate and analyze?
-	// maybe find
-	return ""
+	// break problem into parts
+	// track the longest so far
+	// find the center then expand
+	longest := ""
+	first := 0
+	last := 0
+	for first < len(s) {
+		first, last = constructPalindrome(s, first)
+		if last+1-first > len(longest) {
+			longest = string(s[first : last+1])
+		}
+		first = last + 1
+	}
+	return longest
 }

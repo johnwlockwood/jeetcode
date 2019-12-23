@@ -152,6 +152,18 @@ func TestLongestPalindrome(t *testing.T) {
 			input: "cbbd",
 			want:  "bb",
 		},
+		{
+			input: "bbbaa",
+			want:  "bbb",
+		},
+		{
+			input: "aaabbccbb",
+			want:  "bbccbb",
+		},
+		{
+			input: "aaabbccbbgyg",
+			want:  "bbccbb",
+		},
 	}
 	for _, tc := range tests {
 		if got := longestPalindrome(tc.input); got != tc.want {
