@@ -68,12 +68,12 @@ func longestPalindrome(s string) string {
 	last := 0
 	for first < len(s) {
 		fmt.Printf("first %s\n", s[first:first+1])
-		lastCenter := findCenter(s, first)
-		first, last = expandFromCenter(s, first, lastCenter)
+		centerLast := findCenter(s, first)
+		first, last = expandFromCenter(s, first, centerLast)
 		if last+1-first > len(longest) {
 			longest = s[first : last+1]
 		}
-		first = lastCenter + 1
+		first = centerLast + 1
 	}
 	return longest
 }
