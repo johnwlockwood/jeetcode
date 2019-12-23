@@ -24,3 +24,34 @@ func maxArea(height []int) int {
 	}
 	return max
 }
+
+// Runtime: 12 ms, faster than 91.33% of Go online submissions for Container With Most Water.
+// Memory Usage: 5.6 MB, less than 100.00% of Go online submissions for Container With Most Water.
+// https://leetcode.com/submissions/detail/288022095/
+// based on 2 pointers solution
+// 	give up on the lesser height[l], height[r] of l and r
+func maxAreaSinglePass(height []int) int {
+	max := 0
+	l := 0
+	r := len(height) - 1
+	for l < r {
+		var minHeight int
+		if height[l] < height[r] {
+			minHeight = height[l]
+		} else {
+			minHeight = height[r]
+		}
+		w := r - l
+		area := w * minHeight
+		if area > max {
+			max = area
+		}
+		if height[l] < height[r] {
+			l++
+		} else {
+			r--
+		}
+
+	}
+	return max
+}
