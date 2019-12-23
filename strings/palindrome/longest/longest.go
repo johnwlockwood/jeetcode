@@ -51,7 +51,8 @@ func constructPalindrome(s string, first int) (int, int) {
 func longestPalindrome(s string) string {
 	// break problem into parts
 	// track the longest so far
-	// find the center then expand
+	// find the center then expand to find the first and last
+	// make the next first after the last
 	longest := ""
 	first := 0
 	last := 0
