@@ -3,12 +3,16 @@ package longest
 import "fmt"
 
 func findCenter(s string, first int) int {
-	for last := first; last < len(s); last++ {
+	last := first
+	for last < len(s) {
 		if s[first] != s[last] {
 			return last - 1
+		} else if last == len(s)-1 {
+			return last
 		}
+		last++
 	}
-	return first
+	return last
 }
 
 func constructPalindrome(s string, first int) (int, int) {

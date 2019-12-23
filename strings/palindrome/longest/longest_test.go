@@ -44,6 +44,11 @@ func TestFindCenter(t *testing.T) {
 			inputIndex: 3,
 			want:       3,
 		},
+		{
+			input:      "aaaaaa",
+			inputIndex: 0,
+			want:       5,
+		},
 	}
 	for _, tc := range tests {
 		if got := findCenter(tc.input, tc.inputIndex); got != tc.want {
@@ -111,6 +116,14 @@ func TestConstructPalindrome(t *testing.T) {
 			want: want{
 				first: 3,
 				last:  3,
+			},
+		},
+		{
+			input:      "aaaaaa",
+			inputIndex: 0,
+			want: want{
+				first: 0,
+				last:  5,
 			},
 		},
 	}
