@@ -35,17 +35,19 @@ func longestPalindrome(s string) string {
 	// for the first first, construct the palindrome by
 	// 	finding the center then expanding to find the first and last
 	// make the next first after the last
-	longest := ""
+	longestLeft := 0
+	longestRight := 0
 	first := 0
 	fmt.Printf("%s\n", s)
 	for first < len(s) {
-		centerLast := findCenter(s, first)
-		left, last := expandFromCenter(s, first, centerLast)
-		if last+1-left > len(longest) {
-			longest = s[left : last+1]
+		centerRight := findCenter(s, first)
+		left, right := expandFromCenter(s, first, centerRight)
+		if right-left > longestRight-longestLeft {
+			longestLeft = left
+			longestRight = right
 		}
-		fmt.Printf("\tfirst %s \tf: %d +=%d\t%s\n", s[first:first+1], first, centerLast+1-first, longest)
-		first = centerLast + 1
+		fmt.Printf("\tfirst %s \tf: %d +=%d\t%s\n", s[first:first+1], first, centerRight+1-first, s[longestLeft:longestRight+1])
+		first = centerRight + 1
 	}
-	return longest
+	return s[longestLeft : longestRight+1]
 }
