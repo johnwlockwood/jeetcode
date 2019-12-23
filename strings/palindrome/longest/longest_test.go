@@ -153,6 +153,10 @@ func TestLongestPalindrome(t *testing.T) {
 			want:  "anana",
 		},
 		{
+			input: "banaanas",
+			want:  "anaana",
+		},
+		{
 			input: "babad",
 			want:  "bab",
 		},
