@@ -2,81 +2,57 @@ package longest
 
 import "testing"
 
-func TestConstructPalindrome(t *testing.T) {
-	type want struct {
-		start int
-		end   int
-	}
+func TestFindCenter(t *testing.T) {
 
 	type test struct {
 		input      string
 		inputIndex int
-		want       want
+		want       int
 	}
 
 	tests := []test{
 		{
 			input:      "babad",
 			inputIndex: 1,
-			want: want{
-				start: 0,
-				end:   3,
-			},
+			want:       1,
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 1,
-			want: want{
-				start: 1,
-				end:   3,
-			},
+			want:       2,
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 2,
-			want: want{
-				start: 2,
-				end:   3,
-			},
+			want:       2,
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 3,
-			want: want{
-				start: 3,
-				end:   4,
-			},
+			want:       3,
 		},
 		{
 			input:      "abccda",
 			inputIndex: 2,
-			want: want{
-				start: 0,
-				end:   6,
-			},
+			want:       3,
 		},
 		{
 			input:      "abccda",
 			inputIndex: 3,
-			want: want{
-				start: 3,
-				end:   4,
-			},
+			want:       3,
 		},
 	}
 	for _, tc := range tests {
-		if start, end := constructPalindrome(tc.input, tc.inputIndex); start != tc.want.start || end != tc.want.end {
-			t.Errorf("from %s at %d, made palindrome , start %d, end %d, want %v", tc.input, tc.inputIndex, start, end, tc.want)
-			//string(tc.input[start:end])
+		if got := findCenter(tc.input, tc.inputIndex); got != tc.want {
+			t.Errorf("from %s at %d, center got %d, want %v", tc.input, tc.inputIndex, got, tc.want)
 		}
 	}
 }
 
-func TestIsPalindrome(t *testing.T) {
+func TestConstructPalindrome(t *testing.T) {
 	type want struct {
-		is    bool
-		start int
-		end   int
+		first int
+		last  int
 	}
 
 	type test struct {
@@ -90,42 +66,55 @@ func TestIsPalindrome(t *testing.T) {
 			input:      "babad",
 			inputIndex: 1,
 			want: want{
-				is:    true,
-				start: 0,
-				end:   3,
+				first: 1,
+				last:  2,
 			},
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 1,
 			want: want{
-				is:    true,
-				start: 1,
-				end:   3,
+				first: 1,
+				last:  2,
 			},
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 2,
 			want: want{
-				is:    true,
-				start: 1,
-				end:   3,
+				first: 2,
+				last:  2,
 			},
 		},
 		{
 			input:      "cbbd",
 			inputIndex: 3,
 			want: want{
-				is:    false,
-				start: 3,
-				end:   4,
+				first: 3,
+				last:  3,
+			},
+		},
+		{
+			input:      "abccda",
+			inputIndex: 2,
+			want: want{
+				first: 0,
+				last:  5,
+			},
+		},
+		{
+			input:      "abccda",
+			inputIndex: 3,
+			want: want{
+				first: 3,
+				last:  3,
 			},
 		},
 	}
 	for _, tc := range tests {
-		if got, start, end := isPalindrome(tc.input, tc.inputIndex); got != tc.want.is || start != tc.want.start || end != tc.want.end {
-			t.Errorf("from %s at %d, got %v start %d, end %d, want %v", tc.input, tc.inputIndex, got, start, end, tc.want)
+		if first, last := constructPalindrome(tc.input, tc.inputIndex); first != tc.want.first || last != tc.want.last {
+			t.Errorf("from %s at %d, made palindrome , first %d, last %d, want %v", tc.input, tc.inputIndex, first, last, tc.want)
+			//string(tc.input[start:end])
 		}
 	}
 }
