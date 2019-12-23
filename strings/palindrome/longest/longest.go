@@ -46,14 +46,14 @@ func longestPalindrome(s string) string {
 	longestRight := 0
 	first := 0
 	fmt.Printf("%s\n", s)
-	for first < len(s) {
+	for first < len(s) && (first < len(s)/2+1 || first < len(s)-longestRight-longestLeft) {
 		centerRight := findCenter(s, first)
 		left, right := expandFromCenter(s, first, centerRight)
 		if right-left > longestRight-longestLeft {
 			longestLeft = left
 			longestRight = right
 		}
-		fmt.Printf("\tfirst %s \tf: %d +=%d\t%s\n", s[first:first+1], first, centerRight+1-first, s[longestLeft:longestRight+1])
+		fmt.Printf("\tfirst %s \tf: %d +=%d\t%s\t%s\n", s[first:first+1], first, centerRight+1-first, s[longestLeft:longestRight+1], s[left:right+1])
 		first = centerRight + 1
 	}
 	return s[longestLeft : longestRight+1]
