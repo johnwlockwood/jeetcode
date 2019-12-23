@@ -157,6 +157,14 @@ func TestLongestPalindrome(t *testing.T) {
 			want:  "bbb",
 		},
 		{
+			input: "abcdef",
+			want:  "a",
+		},
+		{
+			input: "bbbertcuiwaaaa",
+			want:  "aaaa",
+		},
+		{
 			input: "aaabbccbb",
 			want:  "bbccbb",
 		},
