@@ -23,6 +23,17 @@ func TestGenerateParentheses(t *testing.T) {
 				"()()()",
 			},
 		},
+		{
+			input: 2,
+			want: []string{
+				"(())",
+				"()()",
+			},
+		},
+		{
+			input: 0,
+			want:  []string{},
+		},
 	}
 
 	for _, tc := range tests {
