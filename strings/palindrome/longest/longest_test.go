@@ -1,6 +1,9 @@
 package longest
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestFindCenter(t *testing.T) {
 
@@ -32,12 +35,12 @@ func TestFindCenter(t *testing.T) {
 			want:       3,
 		},
 		{
-			input:      "abccda",
+			input:      "abccba",
 			inputIndex: 2,
 			want:       3,
 		},
 		{
-			input:      "abccda",
+			input:      "abccba",
 			inputIndex: 3,
 			want:       3,
 		},
@@ -66,7 +69,7 @@ func TestConstructPalindrome(t *testing.T) {
 			input:      "babad",
 			inputIndex: 1,
 			want: want{
-				first: 1,
+				first: 0,
 				last:  2,
 			},
 		},
@@ -95,7 +98,7 @@ func TestConstructPalindrome(t *testing.T) {
 			},
 		},
 		{
-			input:      "abccda",
+			input:      "abccba",
 			inputIndex: 2,
 			want: want{
 				first: 0,
@@ -103,7 +106,7 @@ func TestConstructPalindrome(t *testing.T) {
 			},
 		},
 		{
-			input:      "abccda",
+			input:      "abccba",
 			inputIndex: 3,
 			want: want{
 				first: 3,
@@ -115,6 +118,8 @@ func TestConstructPalindrome(t *testing.T) {
 		if first, last := constructPalindrome(tc.input, tc.inputIndex); first != tc.want.first || last != tc.want.last {
 			t.Errorf("from %s at %d, made palindrome , first %d, last %d, want %v", tc.input, tc.inputIndex, first, last, tc.want)
 			//string(tc.input[start:end])
+		} else {
+			fmt.Printf("success: %s\n\n", string(tc.input[first:last+1]))
 		}
 	}
 }
