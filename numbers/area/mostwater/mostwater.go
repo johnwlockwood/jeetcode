@@ -9,9 +9,7 @@ import "math"
 
 func maxArea(height []int) int {
 	// for each value from the right to the left, calc area = min(ni, nj)*(j-i)
-	// trac max h=min(ni, nj) // optimization for later
 	// track max area
-	// if hj is less than max h, skip // optimization for later
 	max := 0
 	for i := 0; i < len(height)-1; i++ {
 		for j := len(height) - 1; j > i; j-- {
