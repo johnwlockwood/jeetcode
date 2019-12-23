@@ -29,12 +29,19 @@ func constructPalindrome(s string, first int) (int, int) {
 	return first, last
 }
 
+// without print statements:
+// Runtime: 0 ms, faster than 100.00% of Go online submissions for Longest Palindromic Substring.
+// Memory Usage: 2.2 MB, less than 100.00% of Go online submissions for Longest Palindromic Substring.
+// https://leetcode.com/submissions/detail/287942819/
 func longestPalindrome(s string) string {
 	// break problem into parts
 	// track the longest so far
 	// for the first first, construct the palindrome by
 	// 	finding the center then expanding to find the first and last
 	// make the next first after the last
+	if len(s) < 2 {
+		return s
+	}
 	longestLeft := 0
 	longestRight := 0
 	first := 0
