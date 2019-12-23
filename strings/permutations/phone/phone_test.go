@@ -16,6 +16,10 @@ func TestLetterCombinations(t *testing.T) {
 			input: "23",
 			want:  []string{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"},
 		},
+		{
+			input: "9",
+			want:  []string{"w", "x", "y", "z"},
+		},
 	}
 	for _, tc := range tests {
 		if got := letterCombinations(tc.input); !sortNCompare(got, tc.want) {

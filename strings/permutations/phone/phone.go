@@ -24,9 +24,6 @@ func letterCombinations(digits string) []string {
 	for _, d := range digitLetters {
 		lastCombos = append(lastCombos, string(d))
 	}
-	if len(digits) == 1 {
-		return lastCombos
-	}
 	for i := len(digits) - 2; i >= 0; i-- {
 		d := digits[i]
 		letters := digitToLetters[d]
