@@ -9,6 +9,10 @@ func findRotation(rotated []int, left, right int) int {
 		return right
 	}
 	half := ((right + 1 - left) / 2) + left
+	if rotated[half-1] > rotated[half] {
+		// pivot is in the middle
+		return half
+	}
 	if rotated[left] > rotated[right] {
 		if right-left == 2 {
 			return right
