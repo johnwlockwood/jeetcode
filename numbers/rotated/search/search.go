@@ -5,7 +5,6 @@ func findRotation(rotated []int, left, right int) int {
 	if right == left {
 		return right
 	}
-	// mid := (left + right) / 2
 	half := ((right + 1 - left) / 2) + left
 	if rotated[half-1] > rotated[half] {
 		// pivot is in the middle
@@ -51,5 +50,6 @@ func search(nums []int, target int) int {
 		// search left of pivot
 		return binarySearch(nums, target, 0, pivot-1)
 	}
+	// search right of pivot
 	return binarySearch(nums, target, pivot, len(nums)-1)
 }
