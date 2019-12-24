@@ -11,10 +11,11 @@ func swapPairs(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
-	nH := swapPairs(head.Next.Next)
-	tmp := head
-	head = head.Next
-	head.Next = tmp
-	head.Next.Next = nH
-	return head
+	firstNode := head
+	secondNode := head.Next
+
+	firstNode.Next = swapPairs(secondNode.Next)
+	secondNode.Next = firstNode
+
+	return secondNode
 }
