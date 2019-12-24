@@ -55,6 +55,55 @@ func TestSwapPairs(t *testing.T) {
 	}
 }
 
+func TestSwapPairsIterative(t *testing.T) {
+	type test struct {
+		input *ListNode
+		want  *ListNode
+	}
+
+	tests := []test{
+		{
+			input: &ListNode{
+				Val: 1,
+			},
+			want: &ListNode{
+				Val: 1,
+			},
+		},
+		{
+			input: &ListNode{
+				Val: 1,
+				Next: &ListNode{
+					Val: 2,
+					Next: &ListNode{
+						Val: 3,
+						Next: &ListNode{
+							Val: 4,
+						},
+					},
+				},
+			},
+			want: &ListNode{
+				Val: 2,
+				Next: &ListNode{
+					Val: 1,
+					Next: &ListNode{
+						Val: 4,
+						Next: &ListNode{
+							Val: 3,
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, tc := range tests {
+		if got := swapPairsIterative(tc.input); getVal(got) != getVal(tc.want) {
+			t.Errorf("got %v, want %v", getVal(got), getVal(tc.want))
+		}
+	}
+}
+
 func nextVal(b *strings.Builder, n *ListNode) {
 	if n.Next != nil {
 		nextVal(b, n.Next)
