@@ -14,13 +14,7 @@ func findRotation(rotated []int, left, right int) int {
 		return half
 	}
 	if rotated[left] > rotated[right] {
-		if right-left == 2 {
-			return right
-		}
 		if rotated[left] > rotated[half] {
-			if half-left == 1 {
-				return half
-			}
 			// search left
 			return findRotation(rotated, left, half-1)
 		}
