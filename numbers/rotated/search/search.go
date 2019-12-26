@@ -2,23 +2,20 @@ package search
 
 // find the rotation point
 func findRotation(nums []int, left, right int) int {
-	if right <= left {
-		return left
-	}
-
-	mid := (left + 1 + right) / 2
-
-	if nums[mid] > nums[mid-1] {
-		// mid isn't the lowest number
+	for left < right {
+		mid := (left + 1 + right) / 2
+		if nums[mid-1] > nums[mid] {
+			return mid
+		}
 		if nums[mid] > nums[right] {
 			// search right half
-			return findRotation(nums, mid+1, right)
+			left = mid + 1
+		} else {
+			// search left half
+			right = mid - 1
 		}
-		// search left half
-		return findRotation(nums, left, mid-1)
 	}
-	// mid is the lowest number
-	return mid
+	return left
 }
 
 func binarySearch(nums []int, item, low, high int) int {
@@ -48,7 +45,26 @@ func search(nums []int, target int) int {
 	if len(nums) <= 0 {
 		return -1
 	}
-	pivot := findRotation(nums, 0, len(nums)-1)
+	pivot := 0
+	left := 0
+	right := len(nums) - 1
+	for left < right {
+		mid := (left + 1 + right) / 2
+		if nums[mid-1] > nums[mid] {
+			pivot = mid
+			break
+		}
+		if nums[mid] > nums[right] {
+			// search right half
+			left = mid + 1
+		} else {
+			// search left half
+			right = mid - 1
+		}
+	}
+	if left >= right {
+		pivot = left
+	}
 	if nums[pivot] == target {
 		return pivot
 	} else if pivot > 0 && nums[pivot-1] >= target && target > nums[len(nums)-1] {
