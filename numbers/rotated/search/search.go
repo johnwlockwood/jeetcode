@@ -45,26 +45,7 @@ func search(nums []int, target int) int {
 	if len(nums) <= 0 {
 		return -1
 	}
-	pivot := 0
-	left := 0
-	right := len(nums) - 1
-	for left < right {
-		mid := (left + 1 + right) / 2
-		if nums[mid-1] > nums[mid] {
-			pivot = mid
-			break
-		}
-		if nums[mid] > nums[right] {
-			// search right half
-			left = mid + 1
-		} else {
-			// search left half
-			right = mid - 1
-		}
-	}
-	if left >= right {
-		pivot = left
-	}
+	pivot := findRotation(nums, 0, len(nums)-1)
 	if nums[pivot] == target {
 		return pivot
 	} else if pivot > 0 && nums[pivot-1] >= target && target > nums[len(nums)-1] {
