@@ -80,10 +80,22 @@ func TestSearch(t *testing.T) {
 			want:   -1,
 		},
 		{
+			name:   "0 in 3 pivot 0",
+			input:  []int{1, 3, 4},
+			inputT: 0,
+			want:   -1,
+		},
+		{
 			name:   "3 in 2 pivot 1",
 			input:  []int{3, 1},
 			inputT: 3,
 			want:   0,
+		},
+		{
+			name:   "2 in 7 pivot 4",
+			input:  []int{7, 8, 1, 3, 4, 5, 6},
+			inputT: 0,
+			want:   -1,
 		},
 		{
 			name:   "4 in 7 pivot 4",
