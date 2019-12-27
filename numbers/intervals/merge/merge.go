@@ -11,6 +11,9 @@ func merge(intervals [][]int) [][]int {
 	})
 	marked := make([]bool, len(intervals))
 	for i := 0; i < len(intervals)-1; i++ {
+		if marked[i] {
+			continue
+		}
 		for j := i + 1; j < len(intervals); j++ {
 			if intervals[j][0] <= intervals[i][1] && !marked[j] {
 				intervals[i][1] = int(math.Max(float64(intervals[i][1]), float64(intervals[j][1])))
