@@ -20,6 +20,10 @@ func TestMerge(t *testing.T) {
 			input: [][]int{{1, 4}, {4, 5}},
 			want:  [][]int{{1, 5}},
 		},
+		{
+			input: [][]int{{1, 4}, {0, 4}},
+			want:  [][]int{{0, 4}},
+		},
 	}
 	for _, tc := range tests {
 		if got := merge(tc.input); !reflect.DeepEqual(got, tc.want) {
