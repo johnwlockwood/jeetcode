@@ -6,6 +6,7 @@ import (
 )
 
 func groupAnagrams(strs []string) [][]string {
+	keys := []string{}
 	letterMap := make(map[string][]string, 0)
 	for _, v := range strs {
 		keyValues := strings.Split(v, "")
@@ -15,10 +16,12 @@ func groupAnagrams(strs []string) [][]string {
 			letterMap[key] = append(letterMap[key], v)
 		} else {
 			letterMap[key] = []string{v}
+			keys = append(keys, key)
 		}
 	}
 	output := [][]string{}
-	for _, v := range letterMap {
+	for _, k := range keys {
+		v := letterMap[k]
 		output = append(output, v)
 	}
 	return output
