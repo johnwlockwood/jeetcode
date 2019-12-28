@@ -1,14 +1,27 @@
 package common
 
-import "fmt"
-
 func findContiguousHistory(userA, userB []string) []string {
+	// Use Memoization, a component of Dynamic Programming
+	// for each pair of strings, we need to store the count of contiguous prevous pairs matching
+	// for each pair, if they match, look up the count of the previous pair and store that count +1
+	// at this pair coordinates
+	// keep track of the max count and the index of A of the pairs where that max was set
+	// build the common history from the values of A from max index of A-result to the max index of A
+
 	// create a matrix which counts contiguous common values
 	lcs := make([][]int, len(userA)+1)
 	for i := range lcs {
 		lcs[i] = make([]int, len(userB)+1)
 	}
 
+	// userA = B A C E
+	// userB = F A C
+	//
+	// 		    B A C E
+	//		  0 0 0 0 0
+	//		F 0 0 0 0 0
+	//		A 0 0 1 0 0
+	//		C 0 0 0 2 0
 	for i := 1; i <= len(userA); i++ {
 		for j := 1; j <= len(userB); j++ {
 			if userA[i-1] == userB[j-1] {
@@ -17,31 +30,22 @@ func findContiguousHistory(userA, userB []string) []string {
 		}
 	}
 
-	longestI := -1
-	longestJ := -1
+	longestAIndex := -1
 	result := -1
 	for i := 0; i <= len(userA); i++ {
 		for j := 0; j <= len(userB); j++ {
 			if result < lcs[i][j] {
 				result = lcs[i][j]
-				longestI = i
-				longestJ = j
+				longestAIndex = i
 			}
 		}
 	}
 	if result <= 0 {
 		return []string{}
 	}
-	fmt.Printf("%v\n longest size %d\n", lcs, result)
-
-	fmt.Printf("longest coord i:%d j:%d\n", longestI, longestJ)
-
 	longest := make([]string, 0, result)
-	for i := longestI - result; i < longestI; i++ {
+	for i := longestAIndex - result; i < longestAIndex; i++ {
 		longest = append(longest, userA[i])
 	}
-
-	fmt.Printf("%v\n", longest)
-
 	return longest
 }
