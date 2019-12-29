@@ -17,7 +17,7 @@ func backTrackPractice(first int, nums []int, perms *[][]int) {
 	}
 }
 
-func permuteBackTrackPractice(nums []int) [][]int {
+func PermuteBackTrackPractice(nums []int) [][]int {
 	// init perms matrix; backtrack from 0;return perms
 	perms := make([][]int, 0)
 	backTrackPractice(0, nums, &perms)

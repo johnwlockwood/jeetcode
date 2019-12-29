@@ -139,3 +139,47 @@ func TestJumpGame(t *testing.T) {
 		})
 	}
 }
+
+func TestVerbalArithmeticPuzzle(t *testing.T) {
+	type test struct {
+		name        string
+		inputWords  []string
+		inputResult string
+		want        bool
+	}
+
+	tests := []test{
+		{
+			name:        `words = ["SEND","MORE"], result = "MONEY"`,
+			inputWords:  []string{"SEND", "MORE"},
+			inputResult: "MONEY",
+			want:        true,
+		},
+		{
+			name:        `words = ["SIX","SEVEN","SEVEN"], result = "TWENTY"`,
+			inputWords:  []string{"SIX", "SEVEN", "SEVEN"},
+			inputResult: "TWENTY",
+			want:        true,
+		},
+		{
+			name:        `words = ["THIS","IS","TOO"], result = "FUNNY"`,
+			inputWords:  []string{"THIS", "IS", "TOO"},
+			inputResult: "FUNNY",
+			want:        true,
+		},
+		{
+			name:        `words = ["LEET","CODE"], result = "POINT"`,
+			inputWords:  []string{"LEET", "CODE"},
+			inputResult: "POINT",
+			want:        false,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := isSolvable(tc.inputWords, tc.inputResult); got != tc.want {
+				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}

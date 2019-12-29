@@ -18,7 +18,7 @@ func TestPermutations(t *testing.T) {
 		{name: "permuteRecursive", f: permuteRecursive},
 		{name: "permuteBacktrack", f: permuteBacktrack},
 		{name: "permuteBacktrack2", f: permuteBacktrack2},
-		{name: "permuteBackTrackPractice", f: permuteBackTrackPractice},
+		{name: "PermuteBackTrackPractice", f: PermuteBackTrackPractice},
 	}
 	type test struct {
 		input []int
