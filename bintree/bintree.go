@@ -56,13 +56,11 @@ func getVals(node *TreeNode, vals *[]int) {
 	*vals = append(*vals, node.Val)
 }
 
-func helper(arrP *[]int, visitedP *[]bool, start int) bool {
-	visited := *visitedP
+func helper(arr []int, visited []bool, start int) bool {
 	if visited[start] {
 		return false
 	}
 	visited[start] = true
-	arr := *arrP
 	// for start, is if left is in range,
 	if arr[start] == 0 {
 		return true
@@ -70,12 +68,12 @@ func helper(arrP *[]int, visitedP *[]bool, start int) bool {
 	l, r := start-arr[start], start+arr[start]
 	n := len(arr)
 	if l != start && l >= 0 && l < n {
-		if helper(arrP, &visited, l) {
+		if helper(arr, visited, l) {
 			return true
 		}
 	}
 	if r != start && r >= 0 && r < n {
-		if helper(arrP, &visited, r) {
+		if helper(arr, visited, r) {
 			return true
 		}
 	}
@@ -85,5 +83,5 @@ func helper(arrP *[]int, visitedP *[]bool, start int) bool {
 // Jump Game III
 func canReach(arr []int, start int) bool {
 	visited := make([]bool, len(arr))
-	return helper(&arr, &visited, start)
+	return helper(arr, visited, start)
 }
