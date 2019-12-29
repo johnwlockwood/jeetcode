@@ -1,6 +1,9 @@
 package bintree
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // TreeNode is a node in a binary tree
 type TreeNode struct {
@@ -33,5 +36,22 @@ func PreOrder(root *TreeNode) string {
 }
 
 func getAllElements(root1 *TreeNode, root2 *TreeNode) []int {
-	return []int{}
+	vals := make([]int, 0)
+	getVals(root1, &vals)
+	getVals(root2, &vals)
+	sort.Ints(vals)
+	return vals
+}
+
+func getVals(node *TreeNode, vals *[]int) {
+	if node == nil {
+		return
+	}
+	if node.Left != nil {
+		getVals(node.Left, vals)
+	}
+	if node.Right != nil {
+		getVals(node.Right, vals)
+	}
+	*vals = append(*vals, node.Val)
 }

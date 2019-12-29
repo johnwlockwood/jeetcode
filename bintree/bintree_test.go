@@ -15,19 +15,6 @@ func TestGetAll(t *testing.T) {
 
 	tests := []test{
 		{
-			name: "[1 1][1]",
-			inputS: &TreeNode{
-				Val: 1,
-				Left: &TreeNode{
-					Val: 1,
-				},
-			},
-			inputT: &TreeNode{
-				Val: 1,
-			},
-			want: []int{1, 1, 1},
-		},
-		{
 			name: "[4 1][4 1]",
 			inputS: &TreeNode{
 				Val: 4,
@@ -36,12 +23,24 @@ func TestGetAll(t *testing.T) {
 				},
 			},
 			inputT: &TreeNode{
-				Val: 4,
+				Val: 8,
 				Left: &TreeNode{
+					Val: 7,
+				},
+				Right: &TreeNode{
 					Val: 1,
+					Left: &TreeNode{
+						Val: 4,
+						Left: &TreeNode{
+							Val: 3,
+						},
+						Right: &TreeNode{
+							Val: 2,
+						},
+					},
 				},
 			},
-			want: []int{1, 1, 4, 4},
+			want: []int{1, 1, 2, 3, 4, 4, 7, 8},
 		},
 		{
 			name: "[4 3 null 1][3 null 1]",
@@ -91,7 +90,7 @@ func TestGetAll(t *testing.T) {
 					Val: 2,
 				},
 			},
-			want: []int{0, 1, 1, 2, 2, 3, 4, 4},
+			want: []int{0, 1, 1, 2, 2, 3, 4, 4, 5},
 		},
 	}
 
@@ -101,6 +100,5 @@ func TestGetAll(t *testing.T) {
 				t.Errorf("got %v, want %v", got, tc.want)
 			}
 		})
-
 	}
 }
