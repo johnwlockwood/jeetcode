@@ -14,6 +14,10 @@ func TestFibonacciRecursiveMem(t *testing.T) {
 			want:  610,
 		},
 		{
+			input: 0,
+			want:  0,
+		},
+		{
 			input: 1,
 			want:  1,
 		},
@@ -43,9 +47,19 @@ func TestFibonacciRecursiveMem(t *testing.T) {
 		},
 	}
 
-	for _, tc := range tests {
-		if got := fibRecursiveMem(tc.input); got != tc.want {
-			t.Errorf("for %d got %d, want %d", tc.input, got, tc.want)
+	t.Run("fibRecursiveMem", func(t *testing.T) {
+		for _, tc := range tests {
+			if got := fibRecursiveMem(tc.input); got != tc.want {
+				t.Errorf("for %d got %d, want %d", tc.input, got, tc.want)
+			}
 		}
-	}
+	})
+
+	t.Run("fibBottomUp", func(t *testing.T) {
+		for _, tc := range tests {
+			if got := fibBottomUp(tc.input); got != tc.want {
+				t.Errorf("for %d got %d, want %d", tc.input, got, tc.want)
+			}
+		}
+	})
 }
