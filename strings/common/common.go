@@ -10,9 +10,13 @@ func findContiguousHistory(userA, userB []string) []string {
 	// build the common history from the values of A from max index of A-result to the max index of A
 
 	// create a matrix which counts contiguous common values
-	lcs := make([][]int, len(userA)+1)
+
+	m := len(userA)
+	n := len(userB)
+
+	lcs := make([][]int, m+1)
 	for i := range lcs {
-		lcs[i] = make([]int, len(userB)+1)
+		lcs[i] = make([]int, n+1)
 	}
 
 	// userA = B A C E
@@ -24,8 +28,6 @@ func findContiguousHistory(userA, userB []string) []string {
 	//		A 0 0 1 0 0
 	//		C 0 0 0 2 0
 
-	m := len(userA)
-	n := len(userB)
 	for i := 1; i <= m; i++ {
 		for j := 1; j <= n; j++ {
 			if userA[i-1] == userB[j-1] {
