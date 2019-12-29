@@ -3,7 +3,9 @@ package common
 func findContiguousHistory(userA, userB []string) []string {
 	// Longest Common Substring
 	// Use Tabulation, a component of Dynamic Programming
-	// The article https://www.geeksforgeeks.org/tabulation-vs-memoization/ is helpful
+	// The article https://www.geeksforgeeks.org/tabulation-vs-memoization/ is helpful.
+	// Tabulation is a good method for this problem, because every sub problem has to
+	// be solved.
 	// for each pair of strings, we need to store the count of contiguous prevous pairs matching
 	// for each pair, if they match, look up the count of the previous pair and store that count +1
 	// at this pair coordinates
