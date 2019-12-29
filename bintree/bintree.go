@@ -55,3 +55,35 @@ func getVals(node *TreeNode, vals *[]int) {
 	}
 	*vals = append(*vals, node.Val)
 }
+
+func helper(arrP *[]int, visitedP *[]bool, start int) bool {
+	visited := *visitedP
+	if visited[start] {
+		return false
+	}
+	visited[start] = true
+	arr := *arrP
+	// for start, is if left is in range,
+	if arr[start] == 0 {
+		return true
+	}
+	l, r := start-arr[start], start+arr[start]
+	n := len(arr)
+	if l != start && l >= 0 && l < n {
+		if helper(arrP, &visited, l) {
+			return true
+		}
+	}
+	if r != start && r >= 0 && r < n {
+		if helper(arrP, &visited, r) {
+			return true
+		}
+	}
+	return false
+}
+
+// Jump Game III
+func canReach(arr []int, start int) bool {
+	visited := make([]bool, len(arr))
+	return helper(&arr, &visited, start)
+}
