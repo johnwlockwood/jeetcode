@@ -27,32 +27,27 @@ func findContiguousHistory(userA, userB []string) []string {
 	//		F 0 0 0 0 0
 	//		A 0 0 1 0 0
 	//		C 0 0 0 2 0
-
+	longestAIndex := -1
+	max := -1
 	for i := 1; i <= m; i++ {
 		for j := 1; j <= n; j++ {
 			if userA[i-1] == userB[j-1] {
 				lcs[i][j] = lcs[i-1][j-1] + 1
+				if max < lcs[i][j] {
+					max = lcs[i][j]
+					longestAIndex = i
+				}
 			}
 		}
 	}
 
-	longestAIndex := -1
-	result := -1
-	for i := 0; i <= m; i++ {
-		for j := 0; j <= n; j++ {
-			if result < lcs[i][j] {
-				result = lcs[i][j]
-				longestAIndex = i
-			}
-		}
-	}
-	if result <= 0 {
+	if max <= 0 {
 		return []string{}
 	}
 
 	// build the longest common history
-	longest := make([]string, 0, result)
-	for i := longestAIndex - result; i < longestAIndex; i++ {
+	longest := make([]string, 0, max)
+	for i := longestAIndex - max; i < longestAIndex; i++ {
 		longest = append(longest, userA[i])
 	}
 	return longest
