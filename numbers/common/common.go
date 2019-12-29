@@ -5,7 +5,10 @@ package common
 
 func findLength(A []int, B []int) int {
 	// Bottom up approach, Dynamic Programming
-	// memoize, memoization
+	// tabulation method
+	// for every A that matches a B, we need to know the count at the previous pair.
+	// if A[3] == B[2], we are going to set lcs[3][2] = 1 + lcs[2][1]
+	// if A[2] == B[1] then that would be 2
 	// check every A against every B
 	// if a pair match, set the value at that match to 1 + the value at the previous pair
 	m := len(A)
