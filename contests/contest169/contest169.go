@@ -7,6 +7,8 @@ import (
 	"github.com/johnwlockwood/jeetcode/permutations"
 )
 
+// One question "All Elements in Two Binary Search Trees" is answered in package bintree by getAllElements
+
 func jumpGameIIIhelper(arr []int, visited []bool, start int) bool {
 	if visited[start] {
 		return false
