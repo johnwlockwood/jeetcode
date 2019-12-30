@@ -35,6 +35,22 @@ func PreOrder(root *TreeNode) string {
 	return s
 }
 
+// InorderTraversal traverses a binary tree inorder
+func InorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return []int{}
+	}
+	vals := make([]int, 0)
+	lefts := InorderTraversal(root.Left)
+	vals = append(vals, lefts...)
+	vals = append(vals, root.Val)
+	rights := InorderTraversal(root.Right)
+	vals = append(vals, rights...)
+	return vals
+}
+
+// contest/weekly-contest-169/problems/all-elements-in-two-binary-search-trees/
+// from contest 169
 func getAllElements(root1 *TreeNode, root2 *TreeNode) []int {
 	vals := make([]int, 0)
 	getVals(root1, &vals)
