@@ -51,56 +51,22 @@ func InorderTraversal(root *TreeNode) []int {
 
 // InorderTraversalIterative traverses a binary tree inorder using an iterative approach
 func InorderTraversalIterative(root *TreeNode) []int {
-
-	// uses a stack for the nodes with which we are not done with.
-	// Prime the stack with the root and a state struct
-	// while there are nodes on the stack
-	// for a node and it's state
-	// use the state to determine if the current node
-	// should:
-	// go back on the stack and add the left node;
-	// the value from the node needs to be added to the vals;
-	// or the right node needs to be added to the stack
-
-	if root == nil {
-		return []int{}
-	}
-	type inorderState struct {
-		left bool
-		node bool
-	}
-	states := make([]inorderState, 0)
+	// use a stack to hold nodes which haven't had
+	// their value consumed or right added to the stack
 	nodes := make([]*TreeNode, 0)
 	vals := make([]int, 0)
-	// traverse left until left is nil
-	// append leaf val
-	var curr *TreeNode
-	nodes = append(nodes, root)
-	states = append(states, inorderState{})
 
-	for len(nodes) > 0 {
-		curr = nodes[len(nodes)-1]
-		s := states[len(states)-1]
-		nodes = nodes[:len(nodes)-1]
-		states = states[:len(states)-1]
-		if !s.left {
-			s.left = true
-			nodes = append(nodes, curr)
-			states = append(states, s)
-			if curr.Left != nil {
-				nodes = append(nodes, curr.Left)
-				states = append(states, inorderState{})
-			}
-		} else if !s.node {
+	for root != nil || len(nodes) > 0 {
+		if root != nil {
+			nodes = append(nodes, root)
+			root = root.Left
+		} else {
+			curr := nodes[len(nodes)-1]
+			nodes = nodes[:len(nodes)-1]
 			vals = append(vals, curr.Val)
-			s.node = true
-			if curr.Right != nil {
-				nodes = append(nodes, curr.Right)
-				states = append(states, inorderState{})
-			}
+			root = curr.Right
 		}
 	}
-
 	return vals
 }
 
