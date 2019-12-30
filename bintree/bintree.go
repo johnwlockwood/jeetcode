@@ -60,6 +60,7 @@ func getAllElements(root1 *TreeNode, root2 *TreeNode) []int {
 }
 
 func getVals(node *TreeNode, vals *[]int) {
+	// postorder traversal
 	if node == nil {
 		return
 	}

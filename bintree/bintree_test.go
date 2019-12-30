@@ -102,3 +102,44 @@ func TestGetAll(t *testing.T) {
 		})
 	}
 }
+
+func TestInorderTraversal(t *testing.T) {
+	type test struct {
+		name  string
+		input *TreeNode
+		want  []int
+	}
+
+	tests := []test{
+		{
+			name: "[7, 8, 3, 4, 2, 1]",
+			input: &TreeNode{
+				Val: 8,
+				Left: &TreeNode{
+					Val: 7,
+				},
+				Right: &TreeNode{
+					Val: 1,
+					Left: &TreeNode{
+						Val: 4,
+						Left: &TreeNode{
+							Val: 3,
+						},
+						Right: &TreeNode{
+							Val: 2,
+						},
+					},
+				},
+			},
+			want: []int{7, 8, 3, 4, 2, 1},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := InorderTraversal(tc.input); !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
