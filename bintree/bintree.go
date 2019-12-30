@@ -94,9 +94,6 @@ func InorderTraversalIterative(root *TreeNode) []int {
 		} else if !s.node {
 			vals = append(vals, curr.Val)
 			s.node = true
-			nodes = append(nodes, curr)
-			states = append(states, s)
-		} else {
 			if curr.Right != nil {
 				nodes = append(nodes, curr.Right)
 				states = append(states, inorderState{})
