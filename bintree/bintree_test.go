@@ -184,3 +184,104 @@ func TestInorderTraversalIterative(t *testing.T) {
 		})
 	}
 }
+
+func TestLevelOrder(t *testing.T) {
+	type test struct {
+		name  string
+		input *TreeNode
+		want  [][]int
+	}
+
+	tests := []test{
+		{
+			name: "1",
+			input: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val: 9,
+				},
+				Right: &TreeNode{
+					Val: 20,
+					Left: &TreeNode{
+						Val: 15,
+					},
+					Right: &TreeNode{
+						Val: 7,
+					},
+				},
+			},
+			want: [][]int{{3}, {9, 20}, {15, 7}},
+		},
+		{
+			name: "4 levels",
+			input: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val: 9,
+					Left: &TreeNode{
+						Val: 55,
+					},
+				},
+				Right: &TreeNode{
+					Val: 20,
+					Left: &TreeNode{
+						Val: 15,
+						Left: &TreeNode{
+							Val: 98,
+						},
+						Right: &TreeNode{
+							Val: 99,
+						},
+					},
+					Right: &TreeNode{
+						Val: 7,
+					},
+				},
+			},
+			want: [][]int{{3}, {9, 20}, {55, 15, 7}, {98, 99}},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := levelOrderValues(tc.input); !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestHeapifyMin(t *testing.T) {
+	type test struct {
+		name  string
+		input *TreeNode
+		want  []int
+	}
+
+	tests := []test{
+		{
+			name: "[7, 8, 3, 4, 2, 1]",
+			input: &TreeNode{
+				Val: 8,
+				Left: &TreeNode{
+					Val: 7,
+				},
+				Right: &TreeNode{
+					Val: 1,
+				},
+			},
+			want: []int{1, 8, 7},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			HeapifyMin(tc.input)
+			vals := make([]int, 0)
+			getValsPreOrder(tc.input, &vals)
+			if got := vals; !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
+}

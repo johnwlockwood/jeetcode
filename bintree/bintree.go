@@ -93,3 +93,37 @@ func getVals(node *TreeNode, vals *[]int) {
 	}
 	*vals = append(*vals, node.Val)
 }
+
+// /problems/binary-tree-level-order-traversal
+func levelOrderValues(root *TreeNode) [][]int {
+	// BFS
+	if root == nil {
+		return [][]int{}
+	}
+	out := make([][]int, 0)
+
+	levelQueue := make([]int, 0)
+	nodeQueue := make([]*TreeNode, 0)
+
+	nodeQueue = append(nodeQueue, root)
+	levelQueue = append(levelQueue, 0)
+	for len(nodeQueue) > 0 {
+		l := levelQueue[0]
+		node := nodeQueue[0]
+		levelQueue = levelQueue[1:]
+		nodeQueue = nodeQueue[1:]
+		if len(out) < l+1 {
+			out = append(out, []int{})
+		}
+		out[l] = append(out[l], node.Val)
+		if node.Left != nil {
+			nodeQueue = append(nodeQueue, node.Left)
+			levelQueue = append(levelQueue, l+1)
+		}
+		if node.Right != nil {
+			nodeQueue = append(nodeQueue, node.Right)
+			levelQueue = append(levelQueue, l+1)
+		}
+	}
+	return out
+}
