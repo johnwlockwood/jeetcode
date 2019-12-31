@@ -127,3 +127,46 @@ func levelOrderValues(root *TreeNode) [][]int {
 	}
 	return out
 }
+
+// based on the given iterative solution
+// this avoids needing to keep a queue for the
+// level value
+func levelOrderValuesIterative(root *TreeNode) [][]int {
+	// BFS
+	if root == nil {
+		return [][]int{}
+	}
+	out := make([][]int, 0)
+
+	nodeQueue := make([]*TreeNode, 0)
+	nodeQueue = append(nodeQueue, root)
+
+	level := 0
+
+	for len(nodeQueue) > 0 {
+		levelSize := len(nodeQueue)
+		// start the current level
+		if len(out) < level+1 {
+			out = append(out, []int{})
+		}
+		for i := 0; i < levelSize; i++ {
+			node := nodeQueue[0]
+			nodeQueue = nodeQueue[1:]
+
+			// fufill the current level
+			out[level] = append(out[level], node.Val)
+
+			// ad child nodes of the current level
+			// in the queue for the next level
+			if node.Left != nil {
+				nodeQueue = append(nodeQueue, node.Left)
+			}
+			if node.Right != nil {
+				nodeQueue = append(nodeQueue, node.Right)
+			}
+		}
+		// go to the next level
+		level++
+	}
+	return out
+}

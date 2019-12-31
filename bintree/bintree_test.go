@@ -249,6 +249,14 @@ func TestLevelOrder(t *testing.T) {
 			}
 		})
 	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := levelOrderValuesIterative(tc.input); !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("got %v, want %v", got, tc.want)
+			}
+		})
+	}
 }
 
 func TestHeapifyMin(t *testing.T) {
