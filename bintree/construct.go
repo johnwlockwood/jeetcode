@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// My solution to problems/construct-binary-tree-from-inorder-and-postorder-traversal
+// Hint: look for lengths of sides!
 func buildTree(inorder []int, postorder []int) *TreeNode {
 	if len(inorder) <= 0 || len(postorder) <= 0 {
 		return nil
@@ -35,21 +37,10 @@ func helper(inorder, postorder []int, inLeft, inRight, postLeft, postRight, inde
 		rootInOrderIndex++
 	}
 	// Build Left Node
-	// find the right boundary of the left side in postorder
 	fmt.Printf("%sBuild Left for root %d\n", strings.Repeat("\t", indent), rootVal)
-	leftPostOrderRightBoundary := postLeft
-	if rootInOrderIndex > inLeft {
-		for leftPostOrderRightBoundary <= postRight {
-			if inorder[inLeft] == postorder[leftPostOrderRightBoundary] {
-				break
-			}
-			leftPostOrderRightBoundary++
-		}
-
-	}
-	// postorder right boundary of the left side is the postRight-1-(inRight-rootInOrderIndex)
+	lenLeft := rootInOrderIndex - inLeft
 	lenRight := inRight - rootInOrderIndex
-	root.Left = helper(inorder, postorder, inLeft, rootInOrderIndex-1, postLeft, postRight-1-lenRight, indent+1)
+	root.Left = helper(inorder, postorder, inLeft, inLeft+lenLeft-1, postLeft, postRight-1-lenRight, indent+1)
 	fmt.Println("")
 	// Build Right Node
 	fmt.Printf("%sBuild Right for root %d\n", strings.Repeat("\t", indent), rootVal)
