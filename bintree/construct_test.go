@@ -60,15 +60,32 @@ func TestBuildTree(t *testing.T) {
 		},
 	}
 
-	for _, tc := range tests {
-		got := buildTree(tc.inorder, tc.postorder)
-		gotV := GetVals(got)
-		want := GetVals(tc.want)
-		// gotV, want := make([]int, 0), make([]int, 0)
-		// getVals(got, &gotV)
-		// getVals(tc.want, &want)
-		if !reflect.DeepEqual(gotV, want) {
-			t.Errorf("got %v, want %v", gotV, want)
+	t.Run("buildTree1", func(t *testing.T) {
+		for _, tc := range tests {
+			got := buildTree(tc.inorder, tc.postorder)
+			gotV := GetVals(got)
+			want := GetVals(tc.want)
+			// gotV, want := make([]int, 0), make([]int, 0)
+			// getVals(got, &gotV)
+			// getVals(tc.want, &want)
+			if !reflect.DeepEqual(gotV, want) {
+				t.Errorf("got %v, want %v", gotV, want)
+			}
 		}
-	}
+	})
+
+	t.Run("buildTree2", func(t *testing.T) {
+		for _, tc := range tests {
+			got := buildTree2(tc.inorder, tc.postorder)
+			gotV := GetVals(got)
+			want := GetVals(tc.want)
+			// gotV, want := make([]int, 0), make([]int, 0)
+			// getVals(got, &gotV)
+			// getVals(tc.want, &want)
+			if !reflect.DeepEqual(gotV, want) {
+				t.Errorf("got %v, want %v", gotV, want)
+			}
+		}
+	})
+
 }
