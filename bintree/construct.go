@@ -21,6 +21,8 @@ func buildTree(inorder []int, postorder []int) *TreeNode {
 	}
 	// pass slice of the arrays inorder and postorder to the helper.
 	// this way they are alway pointing to the same underlying array
+	// storage instead of making a new array for these inputs that
+	// won't change for each recursive call.
 	// https://golang.org/ref/spec#Slice_types
 	return helper(inorder[:], postorder[:], inOrderIndexMap, 0, len(inorder)-1, 0, len(postorder)-1, 0)
 }
