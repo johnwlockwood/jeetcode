@@ -65,9 +65,6 @@ func TestBuildTree(t *testing.T) {
 			got := buildTree(tc.inorder, tc.postorder)
 			gotV := GetVals(got)
 			want := GetVals(tc.want)
-			// gotV, want := make([]int, 0), make([]int, 0)
-			// getVals(got, &gotV)
-			// getVals(tc.want, &want)
 			if !reflect.DeepEqual(gotV, want) {
 				t.Errorf("got %v, want %v", gotV, want)
 			}
@@ -79,9 +76,6 @@ func TestBuildTree(t *testing.T) {
 			got := buildTree2(tc.inorder, tc.postorder)
 			gotV := GetVals(got)
 			want := GetVals(tc.want)
-			// gotV, want := make([]int, 0), make([]int, 0)
-			// getVals(got, &gotV)
-			// getVals(tc.want, &want)
 			if !reflect.DeepEqual(gotV, want) {
 				t.Errorf("got %v, want %v", gotV, want)
 			}
