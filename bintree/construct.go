@@ -10,6 +10,7 @@ import (
 
 // 12ms!
 // 27.6MB
+//
 func buildTree(inorder []int, postorder []int) *TreeNode {
 	if len(inorder) <= 0 || len(postorder) <= 0 {
 		return nil
@@ -18,7 +19,10 @@ func buildTree(inorder []int, postorder []int) *TreeNode {
 	for i, v := range inorder {
 		inOrderIndexMap[v] = i
 	}
-	return helper(inorder, postorder, inOrderIndexMap, 0, len(inorder)-1, 0, len(postorder)-1, 0)
+	// pass slice of the arrays inorder and postorder to the helper.
+	// this way they are alway pointing to the same underlying array
+	// https://golang.org/ref/spec#Slice_types
+	return helper(inorder[:], postorder[:], inOrderIndexMap, 0, len(inorder)-1, 0, len(postorder)-1, 0)
 }
 
 func helper(inorder, postorder []int, inOrderIndexMap map[int]int, inLeft, inRight, postLeft, postRight, indent int) *TreeNode {
