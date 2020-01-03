@@ -54,27 +54,28 @@ func sub(message, key string) string {
 
 	fmt.Println("keyList: ", string(keyList))
 
-	encodeMap := make(map[byte]byte, len(keyList)*2)
-	upper := bytes.ToUpper(keyList)
-	lower := bytes.ToLower(keyList)
-	for i := 0; i < len(upper); i++ {
-		encodeMap[byte(i+int('A'))] = upper[i]
+	encodeMap := make(map[rune]rune, len(keyList)*2)
+	upper := bytes.Runes(bytes.ToUpper(keyList))
+	lower := bytes.Runes(bytes.ToLower(keyList))
+	for i, r := range upper {
+		encodeMap[rune(i+int('A'))] = r
 	}
-	for i := 0; i < len(lower); i++ {
-		encodeMap[byte(i+int('a'))] = lower[i]
+	for i, r := range lower {
+		encodeMap[rune(i+int('a'))] = r
 	}
+
 	fmt.Println("Map")
 	for k, v := range encodeMap {
 		fmt.Printf("%s: %s\n", string(k), string(v))
 	}
 	fmt.Println("")
 
-	ret := make([]byte, 0, len(message))
-	for i := 0; i < len(message); i++ {
-		if v, ok := encodeMap[message[i]]; ok {
+	ret := make([]rune, 0, len(message))
+	for _, r := range message {
+		if v, ok := encodeMap[r]; ok {
 			ret = append(ret, v)
 		} else {
-			ret = append(ret, message[i])
+			ret = append(ret, r)
 		}
 	}
 	return string(ret)
