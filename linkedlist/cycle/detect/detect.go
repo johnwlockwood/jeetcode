@@ -6,6 +6,7 @@ type ListNode struct {
 }
 
 // https://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
+// solution to problems/linked-list-cycle-ii
 func detectCycle(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return nil
