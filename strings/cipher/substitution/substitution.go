@@ -1,8 +1,8 @@
 package substitution
 
 import (
+	"bytes"
 	"fmt"
-	"strings"
 )
 
 /*
@@ -35,32 +35,33 @@ encrypt("It was all a dream.", key) -> "Od ptw txx t qsutg."
 */
 
 func sub(message, key string) string {
-	keySet := make(map[byte]struct{}, 0)
-	keyList := make([]byte, 0, 26)
-	A := []byte("A")[0]
-	// Z := []byte("Z")[0]
-	a := []byte("a")[0]
-	z := []byte("z")[0]
-	key = strings.ToUpper(key)
-	for i := 0; i < len(key); i++ {
-		v := key[i]
-		if _, ok := keySet[v]; !ok && v >= A && v <= z {
-			keyList = append(keyList, v)
+	keySet := make(map[rune]struct{}, 0)
+	alphas := func(r rune) rune {
+		if _, ok := keySet[r]; !ok {
+			keySet[r] = struct{}{}
+			switch {
+			case r >= 'A' && r <= 'Z':
+				return r
+			case r >= 'a' && r <= 'z':
+				return r
+			default:
+				return -1
+			}
 		}
-		keySet[v] = struct{}{}
+		return -1
 	}
-	fmt.Println(string(keyList))
-	encodeMap := make(map[byte]byte, len(key)*2)
+	keyList := bytes.Map(alphas, []byte(key))
 
-	for i := range keyList {
-		v := keyList[i]
-		var upper, lower byte
-		upper = []byte(strings.ToUpper(string(v)))[0]
-		lower = []byte(strings.ToLower(string(v)))[0]
+	fmt.Println("keyList: ", string(keyList))
 
-		encodeMap[byte(i+int(A))] = upper
-		encodeMap[byte(i+int(a))] = lower
-
+	encodeMap := make(map[byte]byte, len(keyList)*2)
+	upper := bytes.ToUpper(keyList)
+	lower := bytes.ToLower(keyList)
+	for i := 0; i < len(upper); i++ {
+		encodeMap[byte(i+int('A'))] = upper[i]
+	}
+	for i := 0; i < len(lower); i++ {
+		encodeMap[byte(i+int('a'))] = lower[i]
 	}
 	fmt.Println("Map")
 	for k, v := range encodeMap {
