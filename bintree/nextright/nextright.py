@@ -38,3 +38,28 @@ as it's next.
                 prev = item
                 
         return root
+
+
+import collections
+class Solution2:
+    """
+    This improves the previous solution by using
+    the more efficient collections.deque and 
+    avoiding keeping a reference to the prev node.
+    """
+    def connect(self, root: 'Node') -> 'Node':
+        if root is None:
+            return None
+        q = collections.deque([root])
+        
+        while q:
+            qs = len(q)
+            for i in range(qs):
+                node = q.popleft()
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+                if i < qs - 1:
+                    node.next = q[0]
+        return root
