@@ -1,5 +1,7 @@
 package lru
 
+import "fmt"
+
 type LRUCache struct {
 	capacity int
 	preHead  *Node
@@ -11,8 +13,6 @@ func Constructor(capacity int) LRUCache {
 	preHead := &Node{}
 	postTail := &Node{}
 	connect(preHead, postTail)
-	// preHead.Next = postTail
-	// postTail.Prev = preHead
 
 	return LRUCache{
 		capacity: capacity,
@@ -23,10 +23,10 @@ func Constructor(capacity int) LRUCache {
 }
 
 func (this *LRUCache) Get(key int) int {
-	if ll, ok := this.cache[key]; ok {
-		this.remove(ll)
-		this.add(ll)
-		return ll.Val
+	if node, ok := this.cache[key]; ok {
+		this.remove(node)
+		this.add(node)
+		return node.Val
 	}
 	return -1
 }
@@ -73,11 +73,30 @@ func (this *LRUCache) Put(key int, value int) {
 	}
 }
 
+func (this *LRUCache) PrintNodes() {
+	printNodes(this.preHead)
+}
+
 type Node struct {
 	Key  int
 	Val  int
 	Prev *Node
 	Next *Node
+}
+
+func printNodes(node *Node) {
+	for node != nil {
+		var prev, next string
+		if node.Prev != nil {
+			prev = fmt.Sprintf("%d:%d", node.Prev.Key, node.Prev.Val)
+		}
+		if node.Next != nil {
+			next = fmt.Sprintf("%d:%d", node.Next.Key, node.Next.Val)
+		}
+		fmt.Printf(" (%s)<-[%d:%d]->(%s)", prev, node.Key, node.Val, next)
+		node = node.Next
+	}
+	fmt.Println("")
 }
 
 func connect(first, second *Node) {
@@ -108,7 +127,7 @@ func removePrev(node *Node) {
 }
 
 func areTheyNeighbors(a, b *Node) bool {
-	return a.Next == b.Prev && b.Prev == a || a.Prev == b && b.Next == a
+	return a.Next == b && b.Prev == a || a.Prev == b && b.Next == a
 }
 
 func refreshOuterPointers(a *Node) {
