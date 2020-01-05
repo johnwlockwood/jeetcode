@@ -63,3 +63,41 @@ func TestFractionToDecimal(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkFractionToDecimal(b *testing.B) {
+	type bench struct {
+		name        string
+		numerator   int
+		denominator int
+	}
+	benches := []bench{
+		{
+			name:        "repeating",
+			numerator:   4,
+			denominator: 333,
+		},
+		{
+			name:        "neg num",
+			numerator:   -50,
+			denominator: 8,
+		},
+		{
+			name:        "no remainder",
+			numerator:   208,
+			denominator: 104,
+		},
+		{
+			name:        "neg den, no remainder",
+			numerator:   2,
+			denominator: -1,
+		},
+	}
+
+	for _, bc := range benches {
+		b.Run(bc.name, func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				_ = fractionToDecimal(bc.numerator, bc.denominator)
+			}
+		})
+	}
+}
