@@ -105,3 +105,31 @@ func TestLRUCache(t *testing.T) {
 		cache.PrintNodes()
 	})
 }
+
+// Example of running benchmark and viewing profiles
+// go test -v -bench "BenchmarkLRUCache" -cpuprofile cpu.out -memprofile mem.prof ./lru/...
+// go tool pprof -web cpu.out
+// go tool pprof -web mem.prof
+func BenchmarkLRUCache(b *testing.B) {
+	g := (*LRUCache).Get
+	p := (*LRUCache).Put
+	for n := 0; n < b.N; n++ {
+		l := Constructor(4)
+		c := &l
+		p(c, 1, 1)
+		p(c, 2, 2)
+		_ = g(c, 1)
+		p(c, 3, 3)
+		p(c, 2, 4)
+		p(c, 3, 3)
+		p(c, 4, 4)
+		p(c, 5, 5)
+		p(c, 6, 6)
+		p(c, 7, 7)
+		p(c, 8, 8)
+		p(c, 9, 9)
+		_ = g(c, 9)
+		p(c, 10, 10)
+		p(c, 11, 11)
+	}
+}

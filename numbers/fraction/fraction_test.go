@@ -64,6 +64,10 @@ func TestFractionToDecimal(t *testing.T) {
 	}
 }
 
+// Example of running benchmark and viewing profiles
+// go test -v -bench "BenchmarkFractionToDecimal/repeating" -cpuprofile cpu.out -memprofile mem.prof ./numbers/fraction
+// go tool pprof -web cpu.out
+// go tool pprof -web mem.prof
 func BenchmarkFractionToDecimal(b *testing.B) {
 	type bench struct {
 		name        string
