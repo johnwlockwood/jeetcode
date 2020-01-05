@@ -49,6 +49,38 @@ func InorderTraversal(root *TreeNode) []int {
 	return vals
 }
 
+// HeapifyMin min heapifies a tree
+// TODO: add tests
+// should result in the minimum value being at that root
+func HeapifyMin(node *TreeNode) {
+	if node == nil {
+		return
+	}
+	HeapifyMin(node.Left)
+	HeapifyMin(node.Right)
+	smallest := node
+	if node.Left != nil && node.Left.Val < node.Val {
+		smallest = node.Left
+	}
+	if node.Right != nil && node.Right.Val < smallest.Val {
+		smallest = node.Right
+	}
+	if smallest != node {
+		Swap(node, smallest)
+	}
+}
+
+// Swap swaps two nodes
+func Swap(n1, n2 *TreeNode) {
+	tmp := n1.Left
+	n1.Left = n2.Left
+	n2.Left = tmp
+
+	tmp = n1.Right
+	n1.Right = n2.Right
+	n2.Right = tmp
+}
+
 // InorderTraversalIterative traverses a binary tree inorder using an iterative approach
 func InorderTraversalIterative(root *TreeNode) []int {
 	// use a stack to hold nodes which haven't had
@@ -92,6 +124,28 @@ func getVals(node *TreeNode, vals *[]int) {
 		getVals(node.Right, vals)
 	}
 	*vals = append(*vals, node.Val)
+}
+
+func getAllElementsPreOrder(root1 *TreeNode, root2 *TreeNode) []int {
+	vals := make([]int, 0)
+	getValsPreOrder(root1, &vals)
+	getValsPreOrder(root2, &vals)
+	sort.Ints(vals)
+	return vals
+}
+
+func getValsPreOrder(node *TreeNode, vals *[]int) {
+	// postorder traversal
+	if node == nil {
+		return
+	}
+	*vals = append(*vals, node.Val)
+	if node.Left != nil {
+		getValsPreOrder(node.Left, vals)
+	}
+	if node.Right != nil {
+		getValsPreOrder(node.Right, vals)
+	}
 }
 
 // /problems/binary-tree-level-order-traversal

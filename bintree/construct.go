@@ -1,10 +1,5 @@
 package bintree
 
-import (
-	"fmt"
-	"strings"
-)
-
 // My solution to problems/construct-binary-tree-from-inorder-and-postorder-traversal
 // Hint: look for lengths of sides!
 
@@ -31,10 +26,10 @@ func helper(inorder, postorder []int, inOrderIndexMap map[int]int, inLeft, inRig
 	if inLeft > inRight {
 		return nil
 	}
-	fmt.Printf("%sinorder:   %v\n", strings.Repeat("\t", indent), inorder[inLeft:inRight+1])
-	fmt.Printf("%spostorder: %v\n", strings.Repeat("\t", indent), postorder[postLeft:postRight+1])
+	// fmt.Printf("%sinorder:   %v\n", strings.Repeat("\t", indent), inorder[inLeft:inRight+1])
+	// fmt.Printf("%spostorder: %v\n", strings.Repeat("\t", indent), postorder[postLeft:postRight+1])
 	rootVal := postorder[postRight]
-	fmt.Printf("%sVal: %d\n", strings.Repeat("\t", indent), rootVal)
+	// fmt.Printf("%sVal: %d\n", strings.Repeat("\t", indent), rootVal)
 	rootInOrderIndex := inOrderIndexMap[rootVal]
 	lenLeft := rootInOrderIndex - inLeft
 	lenRight := inRight - rootInOrderIndex
