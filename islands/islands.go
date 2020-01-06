@@ -9,18 +9,55 @@ func numIslands(grid [][]byte) int {
 	if n == 0 {
 		return 0
 	}
-	arr := make([]int, m*n)
-	initialize(arr, m*n)
+	u := NewUnionFind(m * n)
+	// connect land
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if grid[i][j] == '1' {
+				if i > 0 && grid[i-1][j] == '1' {
+					u.WeightedUnion(gridToArray(n, i, j), gridToArray(n, i-1, j))
+				}
+				if j > 0 && grid[i][j-1] == '1' {
+					u.WeightedUnion(gridToArray(n, i, j), gridToArray(n, i, j-1))
+				}
+			}
+		}
+	}
+
+	// count common roots of land
+	roots := make(map[int]struct{}, 0)
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if grid[i][j] == '1' {
+				root := u.Root(gridToArray(n, i, j))
+				roots[root] = struct{}{}
+			}
+		}
+	}
+
 	// stub
-	return 0
+	return len(roots)
 }
 
+func gridToArray(n, i, j int) int {
+	return i*n + j
+}
+
+func arrayToGrid(x, n int) (int, int) {
+	i := x / n
+	j := x % n
+	return i, j
+}
+
+// learned from https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/
+// UnionFind is a weighted union find or disjoint set data structure.
 type UnionFind struct {
 	arr  []int
 	size []int
 	n    int
 }
 
+// NewUnionFind makes a new UnionFind
 func NewUnionFind(n int) *UnionFind {
 	arr := make([]int, n)
 	for i := 0; i < n; i++ {
@@ -33,6 +70,7 @@ func NewUnionFind(n int) *UnionFind {
 	return &UnionFind{arr: arr, n: n, size: size}
 }
 
+// Root finds the root a node and compresses the path to the root
 func (u *UnionFind) Root(i int) int {
 	for u.arr[i] != i {
 		// path compression: point each to it's grandparent.
@@ -43,6 +81,7 @@ func (u *UnionFind) Root(i int) int {
 	return i
 }
 
+// Find finds if the two nodes are connected
 func (u *UnionFind) Find(a, b int) bool {
 	if u.Root(a) == u.Root(b) {
 		return true
@@ -50,12 +89,14 @@ func (u *UnionFind) Find(a, b int) bool {
 	return false
 }
 
+// Union connects two nodes
 func (u *UnionFind) Union(a, b int) {
 	rootA := u.Root(a)
 	rootB := u.Root(b)
 	u.arr[rootA] = rootB
 }
 
+// WeightedUnion connects two nodes in a way to keep the tree balanced
 func (u *UnionFind) WeightedUnion(a, b int) {
 	rootA := u.Root(a)
 	rootB := u.Root(b)
