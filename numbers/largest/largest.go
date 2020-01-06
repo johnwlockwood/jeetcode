@@ -62,11 +62,6 @@ func (a byLargestCombo) Less(i, j int) bool {
 // BenchmarkLargestNumbeB/3,_30,_34,_5,_9-16         	 2068173	       559 ns/op	     184 B/op	       9 allocs/op
 // BenchmarkLargestNumbeB/3,_30,_34,_5,_9,_0,_0,_999999997,_999999999-16         	 1329195	       907 ns/op	     288 B/op	      14 allocs/op
 // BenchmarkLargestNumbeB/range_3_-_66-16                                        	  190947	      6427 ns/op	    1144 B/op	      58 allocs/op
-// math.Pow10 based
-
-// BenchmarkLargestNumbeB/3,_30,_34,_5,_9-16         	 1983177	       591 ns/op	     184 B/op	       9 allocs/op
-// BenchmarkLargestNumbeB/3,_30,_34,_5,_9,_0,_0,_999999997,_999999999-16         	 1000000	      1013 ns/op	     288 B/op	      14 allocs/op
-// BenchmarkLargestNumbeB/range_3_-_66-16                                        	  138556	      7410 ns/op	    1144 B/op	      58 allocs/op
 func largestNumberB(nums []int) string {
 	a := byLargestCombo(nums)
 	sort.Sort(a)
