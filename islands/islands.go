@@ -17,10 +17,10 @@ func numIslands(grid [][]byte) int {
 		for j := 0; j < n; j++ {
 			if grid[i][j] == '1' {
 				if i > 0 && grid[i-1][j] == '1' {
-					u.Union(gridToArray(n, i, j), gridToArray(n, i-1, j))
+					_ = u.Union(gridToArray(n, i, j), gridToArray(n, i-1, j))
 				}
 				if j > 0 && grid[i][j-1] == '1' {
-					u.Union(gridToArray(n, i, j), gridToArray(n, i, j-1))
+					_ = u.Union(gridToArray(n, i, j), gridToArray(n, i, j-1))
 				}
 			}
 		}
@@ -31,7 +31,7 @@ func numIslands(grid [][]byte) int {
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
 			if grid[i][j] == '1' {
-				root := u.Root(gridToArray(n, i, j))
+				root, _ := u.Root(gridToArray(n, i, j))
 				roots[root] = struct{}{}
 			}
 		}
