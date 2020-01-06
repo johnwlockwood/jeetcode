@@ -15,6 +15,10 @@ func TestLargestNumber(t *testing.T) {
 			want:  "999999999999999998999999997",
 		},
 		{
+			input: []int{0, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+			want:  "9876543210",
+		},
+		{
 			input: []int{0, 0},
 			want:  "0",
 		},
@@ -48,6 +52,10 @@ func TestLargestNumberB(t *testing.T) {
 		{
 			input: []int{0, 0},
 			want:  "0",
+		},
+		{
+			input: []int{0, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+			want:  "9876543210",
 		},
 		{
 			input: []int{10, 2},
