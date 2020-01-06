@@ -35,6 +35,9 @@ func NewUnionFind(n int) *UnionFind {
 
 func (u *UnionFind) root(i int) int {
 	for u.arr[i] != i {
+		// path compression: point each to it's grandparent.
+		// A root is it's own parent, so it's immediate children will find it as it's grandparent.
+		u.arr[i] = u.arr[u.arr[i]]
 		i = u.arr[i]
 	}
 	return i
@@ -62,31 +65,5 @@ func (u *UnionFind) WeightedUnion(a, b int) {
 	} else {
 		u.arr[rootB] = u.arr[rootA]
 		u.size[rootA] += u.size[rootB]
-	}
-}
-
-func find(arr []int, a, b int) bool {
-	if root(arr, a) == root(arr, b) {
-		return true
-	}
-	return false
-}
-
-func root(arr []int, i int) int {
-	for arr[i] != i {
-		i = arr[i]
-	}
-	return i
-}
-
-func union(arr []int, a, b int) {
-	rootA := root(arr, a)
-	rootB := root(arr, b)
-	arr[rootA] = rootB
-}
-
-func initialize(arr []int, n int) {
-	for i := 0; i < n; i++ {
-		arr[i] = i
 	}
 }
