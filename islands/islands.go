@@ -49,8 +49,8 @@ func arrayToGrid(x, n int) (int, int) {
 	return i, j
 }
 
-// learned from https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/
 // UnionFind is a weighted union find or disjoint set data structure.
+// learned from https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/
 type UnionFind struct {
 	arr  []int
 	size []int
