@@ -15,10 +15,10 @@ func numIslands(grid [][]byte) int {
 		for j := 0; j < n; j++ {
 			if grid[i][j] == '1' {
 				if i > 0 && grid[i-1][j] == '1' {
-					u.WeightedUnion(gridToArray(n, i, j), gridToArray(n, i-1, j))
+					u.Union(gridToArray(n, i, j), gridToArray(n, i-1, j))
 				}
 				if j > 0 && grid[i][j-1] == '1' {
-					u.WeightedUnion(gridToArray(n, i, j), gridToArray(n, i, j-1))
+					u.Union(gridToArray(n, i, j), gridToArray(n, i, j-1))
 				}
 			}
 		}
@@ -89,15 +89,8 @@ func (u *UnionFind) Find(a, b int) bool {
 	return false
 }
 
-// Union connects two nodes
+// Union connects two nodes in a way to keep the tree balanced
 func (u *UnionFind) Union(a, b int) {
-	rootA := u.Root(a)
-	rootB := u.Root(b)
-	u.arr[rootA] = rootB
-}
-
-// WeightedUnion connects two nodes in a way to keep the tree balanced
-func (u *UnionFind) WeightedUnion(a, b int) {
 	rootA := u.Root(a)
 	rootB := u.Root(b)
 	if u.size[rootA] < u.size[rootB] {
