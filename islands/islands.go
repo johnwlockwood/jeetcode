@@ -28,12 +28,12 @@ func NewUnionFind(n int) *UnionFind {
 	}
 	size := make([]int, n)
 	for i := 0; i < n; i++ {
-		arr[i] = 1
+		size[i] = 1
 	}
 	return &UnionFind{arr: arr, n: n, size: size}
 }
 
-func (u *UnionFind) root(i int) int {
+func (u *UnionFind) Root(i int) int {
 	for u.arr[i] != i {
 		// path compression: point each to it's grandparent.
 		// A root is it's own parent, so it's immediate children will find it as it's grandparent.
@@ -44,21 +44,21 @@ func (u *UnionFind) root(i int) int {
 }
 
 func (u *UnionFind) Find(a, b int) bool {
-	if u.root(a) == u.root(b) {
+	if u.Root(a) == u.Root(b) {
 		return true
 	}
 	return false
 }
 
 func (u *UnionFind) Union(a, b int) {
-	rootA := u.root(a)
-	rootB := u.root(b)
+	rootA := u.Root(a)
+	rootB := u.Root(b)
 	u.arr[rootA] = rootB
 }
 
 func (u *UnionFind) WeightedUnion(a, b int) {
-	rootA := u.root(a)
-	rootB := u.root(b)
+	rootA := u.Root(a)
+	rootB := u.Root(b)
 	if u.size[rootA] < u.size[rootB] {
 		u.arr[rootA] = u.arr[rootB]
 		u.size[rootB] += u.size[rootA]
