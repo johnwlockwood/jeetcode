@@ -55,6 +55,9 @@ func TestNumIslands(t *testing.T) {
 	}
 }
 
+// BenchmarkNumIslands/numIslandsA/5x5-16         	 2813838	       399 ns/op	     480 B/op	       3 allocs/op
+// BenchmarkNumIslands/numIslandsA/10x10-16       	  574600	      2117 ns/op	    2026 B/op	       4 allocs/op
+
 func BenchmarkNumIslands(b *testing.B) {
 	type bench struct {
 		name  string
