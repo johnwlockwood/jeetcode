@@ -136,10 +136,11 @@ func multiplyRecursive(x, y string, indent int) string {
 
 	total := new(big.Int).Add(ac10n, adbc10nD2)
 	total.Add(total, bdB)
-	// total := add(ac10n, adbc10nD2)
-	// total = add(total, bd)
+	// total := add(ac10n.String(), adbc10nD2.String())
+	// total = add(total, bdB.String())
 	fmt.Printf("%stotal: %s\n", strings.Repeat("\t", indent), total.String())
 	return total.String()
+	// return total
 }
 
 func sign(x string) (string, string) {
