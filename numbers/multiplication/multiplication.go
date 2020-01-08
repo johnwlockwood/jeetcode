@@ -8,7 +8,7 @@ import (
 )
 
 // Karatsuba multiplication
-// TODO: make correct
+// TODO: make correct. I think it is failing to handle odd numbers of digits
 func multiply(x, y string, indent int) string {
 	if len(x) != len(y) {
 		if len(x) < len(y) {
