@@ -10,6 +10,7 @@ import (
 // Karatsuba multiplication
 // TODO: make correct. I think it is failing to handle odd numbers of digits
 // TODO: refer to https://en.wikipedia.org/wiki/Karatsuba_algorithm
+// TODO: refer to karatsuba in math/big/nat.go
 func multiply(x, y string, indent int) string {
 	if len(x) != len(y) {
 		if len(x) < len(y) {
