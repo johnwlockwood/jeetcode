@@ -76,6 +76,9 @@ func IsHappyNaive(n int) bool {
 }
 
 func digits(n int) []int {
+	if n == 0 {
+		return []int{0}
+	}
 	values := make([]int, 0)
 	if n < 0 {
 		return values
