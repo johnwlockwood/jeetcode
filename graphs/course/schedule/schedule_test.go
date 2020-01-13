@@ -11,6 +11,11 @@ func TestCanFinish(t *testing.T) {
 
 	tests := []test{
 		{
+			inputN:       0,
+			inputPrereqs: [][]int{},
+			want:         true,
+		},
+		{
 			inputN:       2,
 			inputPrereqs: [][]int{{1, 0}},
 			want:         true,
@@ -19,6 +24,11 @@ func TestCanFinish(t *testing.T) {
 			inputN:       2,
 			inputPrereqs: [][]int{{1, 0}, {0, 1}},
 			want:         false,
+		},
+		{
+			inputN:       4,
+			inputPrereqs: [][]int{{1, 0}, {2, 0}, {0, 3}, {0, 4}},
+			want:         true,
 		},
 	}
 	for _, tc := range tests {

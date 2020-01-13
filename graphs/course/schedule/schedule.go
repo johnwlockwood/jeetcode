@@ -61,7 +61,7 @@ mark a node if it is impossible to take.
 ****
 
 how to find each root?
-make a map of classes to the list of immediate prerequisites.
+make a map of classes to the list of immediate prerequisites. and then of those, find those which have none.
 
 how to find which classes are required by it?
 
@@ -83,12 +83,80 @@ design of the node struct
 
 {
 	Id int
-	Possible bool
-	Explored bool
+	Possible bool // instead, it is possible by being in the order at the end
+	Explored bool // maybe instead of this, remove it from the graph to the order queue
 	Children/Required by
 }
 
+****
+
+TIL about adjacency list representation of a graph which is good for exploring sparse graphs.
+TIL about topological sort
+
+Design using a topological sort
+
+build the a graph then remove them to a topological sort
+when processNext is empty, compare the number of nodes to the number of courses needed
+
 */
 func canFinish(numCourses int, prerequisites [][]int) bool {
-	return false
+	order := make([]*course, 0)
+	processNext := make([]*course, 0)
+	courseList := makeUnconnectedCourses(prerequisites)
+	connectCourses(courseList, prerequisites)
+	// prime process Next with all courses which have none other required.
+	for _, c := range courseList {
+		if c.RequiredCount == 0 {
+			processNext = append(processNext, c)
+		}
+	}
+	for len(processNext) > 0 {
+		n := processNext[0]
+		processNext = processNext[1:]
+		for _, x := range n.RequiredBy {
+			x.RequiredCount--
+			if x.RequiredCount == 0 {
+				processNext = append(processNext, x)
+			}
+		}
+		order = append(order, n)
+	}
+
+	return len(order) >= numCourses
+}
+
+func makeUnconnectedCourses(prerequisites [][]int) map[int]*course {
+	courseList := make(map[int]*course, 0)
+	for i := 0; i < len(prerequisites); i++ {
+		nv := prerequisites[i][0]
+		if _, ok := courseList[nv]; !ok {
+			courseList[nv] = &course{ID: nv}
+		}
+		v := prerequisites[i][1]
+		if _, ok := courseList[v]; !ok {
+			courseList[v] = &course{ID: v}
+		}
+	}
+	return courseList
+}
+
+func connectCourses(courseList map[int]*course, prerequisites [][]int) {
+	for i := 0; i < len(prerequisites); i++ {
+		l := prerequisites[i][0]
+		r := prerequisites[i][1]
+		cl := courseList[l]
+		cr := courseList[r]
+		// add cr to cl.RequiredBy
+		// increment cr.RequiredCount
+		cl.RequiredBy = append(cl.RequiredBy, cr)
+		cr.RequiredCount++
+	}
+}
+
+type course struct {
+	ID int
+	//outbound edges
+	RequiredBy []*course
+	// inbound count
+	RequiredCount int
 }
