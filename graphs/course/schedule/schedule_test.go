@@ -16,6 +16,11 @@ func TestCanFinish(t *testing.T) {
 			want:         true,
 		},
 		{
+			inputN:       1,
+			inputPrereqs: [][]int{},
+			want:         true,
+		},
+		{
 			inputN:       2,
 			inputPrereqs: [][]int{{1, 0}},
 			want:         true,

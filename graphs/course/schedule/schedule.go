@@ -98,6 +98,10 @@ Design using a topological sort
 build the a graph then remove them to a topological sort
 when processNext is empty, compare the number of nodes to the number of courses needed
 
+*** I misunderstood: there are n courses, the prerequisites represent the ones of those which have prerequisites, not all the courses.
+so if the topological sort length doesn't match the length course list,
+then some courses cannot be taken and return false
+
 */
 func canFinish(numCourses int, prerequisites [][]int) bool {
 	order := make([]*course, 0)
@@ -121,8 +125,7 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 		}
 		order = append(order, n)
 	}
-
-	return len(order) >= numCourses
+	return len(order) == len(courseList)
 }
 
 func makeUnconnectedCourses(prerequisites [][]int) map[int]*course {
