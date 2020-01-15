@@ -1,6 +1,11 @@
 package connected
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+	"strconv"
+	"strings"
+)
 
 // Given a list of edges of a directed graph, where the first item is the tail and the second the head,
 // output the sizes of the 5 largest SCCs(strongly connected component)s contained within. output them in
@@ -18,9 +23,14 @@ func fiveLargestSCCs(edges [][]int) string {
 	// them into a comma separated string
 
 	g := makeAdjacencyList(edges)
-	_ = kosaraju(g)
+	sccCounts := kosaraju(g)
 
-	return "0,0,0,0,0"
+	sccCountsStrs := make([]string, 0, 5)
+	for _, c := range sccCounts {
+		sccCountsStrs = append(sccCountsStrs, strconv.Itoa(c))
+	}
+
+	return strings.Join(sccCountsStrs, ",")
 }
 
 func makeAdjacencyList(edges [][]int) map[int]*node {
@@ -107,6 +117,7 @@ func kosaraju(g map[int]*node) []int {
 	// need this for the first pass? NO, only the second pass, it labels the SCC
 	// considured  explored reversed, so if it is false, it's been explored
 	leaders := make([]int, len(g))
+	leaderCount := make(map[int]int)
 	t = 0
 	for _, s := range finishing {
 		if !explored[s] {
@@ -135,12 +146,27 @@ func kosaraju(g map[int]*node) []int {
 			if unexploredCount == 0 {
 				fmt.Printf("finish %d at position %d\n", n.ID, t)
 				leaders[t] = sn.ID
+				if _, ok := leaderCount[sn.ID]; ok {
+					leaderCount[sn.ID]++
+				} else {
+					leaderCount[sn.ID] = 1
+				}
 				t++
 				processNext = processNext[:len(processNext)-1]
 			}
 		}
-
 	}
+
+	sccCounts := make([]int, 0, len(leaderCount))
+	for _, v := range leaderCount {
+		sccCounts = append(sccCounts, v)
+	}
+	sort.Ints(sccCounts)
+	// pad with zeros if less than 5
+	for len(sccCounts) < 5 {
+		sccCounts = append(sccCounts, 0)
+	}
+
 	headMax := 10
 	if len(finishing) < headMax {
 		headMax = len(finishing)
@@ -150,7 +176,9 @@ func kosaraju(g map[int]*node) []int {
 
 	fmt.Printf("leaders %v\n", leaders)
 
-	return []int{}
+	fmt.Printf("sccCounts %v\n", sccCounts)
+
+	return sccCounts[:5]
 }
 
 type node struct {
