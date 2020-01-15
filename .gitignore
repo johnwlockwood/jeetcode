@@ -2,3 +2,4 @@
 *.out
 *.prof
 *.test
+*.DS_Store
