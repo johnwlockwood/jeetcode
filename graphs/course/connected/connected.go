@@ -84,7 +84,7 @@ func kosaraju(g map[int]*node) []int {
 			fmt.Printf("adding inbound: ")
 
 			for _, v := range n.Inbound {
-				if ok := explored[v.ID]; !ok {
+				if !explored[v.ID] {
 					fmt.Printf("%d ", v.ID)
 					processNext = append(processNext, v.ID)
 					unexploredCount++
@@ -96,7 +96,7 @@ func kosaraju(g map[int]*node) []int {
 				fmt.Printf("finish %d at position %d\n", n.ID, t)
 				t--
 				finishing[t] = n.ID
-				processNext = processNext[:len(processNext)-1] //
+				processNext = processNext[:len(processNext)-1]
 			}
 
 		}
@@ -105,20 +105,50 @@ func kosaraju(g map[int]*node) []int {
 	// set leader(i) := node s
 	// s is the leader of the DFS which first discovered that node. Not just it's parent, but the value from the outer loop.
 	// need this for the first pass? NO, only the second pass, it labels the SCC
+	// considured  explored reversed, so if it is false, it's been explored
+	leaders := make([]int, len(g))
+	t = 0
+	for _, s := range finishing {
+		if !explored[s] {
+			continue
+		}
+		sn := g[s]
+		processNext := make([]int, 0)
+		processNext = append(processNext, s)
+		for len(processNext) > 0 {
+			fmt.Printf("pn: %v\n", processNext)
+			n := g[processNext[len(processNext)-1]]
+			if explored[n.ID] {
+				explored[n.ID] = false
+			}
+			unexploredCount := 0
+			fmt.Printf("adding outbound: ")
+			for _, v := range n.Outbound {
+				if explored[v.ID] {
+					fmt.Printf("%d ", v.ID)
+					processNext = append(processNext, v.ID)
+					unexploredCount++
+				}
+			}
+			fmt.Println("")
+			// no more unexplored inbound(rev of outbound)
+			if unexploredCount == 0 {
+				fmt.Printf("finish %d at position %d\n", n.ID, t)
+				leaders[t] = sn.ID
+				t++
+				processNext = processNext[:len(processNext)-1]
+			}
+		}
 
-	// leaders := make([]int, len(g))
-	// for _, s := range finishing {
-	// 	processNext := make([]int, 0)
-	// 	processNext = append(processNext, s)
-
-	// 	if ok := explored[]
-	// }
+	}
 	headMax := 10
 	if len(finishing) < headMax {
 		headMax = len(finishing)
 	}
 	fmt.Printf("finishing head %v\n", finishing[:headMax])
 	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
+
+	fmt.Printf("leaders %v\n", leaders)
 
 	return []int{}
 }
