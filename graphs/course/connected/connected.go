@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Given a list of edges of a directed graph, where the first item is the tail and the second the head,
@@ -90,14 +91,23 @@ func kosaraju(g map[int]*node) []int {
 	// mark i as explored
 	// for each arc
 	// make a stack and provide it with a starting node
+	x := 0
+	pCount := 0
 	for s := range g {
+		x++
+		if x%5000 == 0 {
+			fmt.Printf("x %d\t\t%v\n", x, time.Now())
+		}
 		if explored[s] {
 			continue
 		}
+
 		debug(fmt.Sprintf("next unexplored graph node: %d\n", s))
 		processNext := make([]int, 0)
 		processNext = append(processNext, s)
+
 		for len(processNext) > 0 {
+			pCount++
 			debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := g[processNext[len(processNext)-1]]
 			if ok := explored[n.ID]; !ok {
@@ -128,12 +138,19 @@ func kosaraju(g map[int]*node) []int {
 				t--
 				finishing[t] = n.ID
 				finishedMap[n.ID] = struct{}{}
-
+				if t%5000 == 0 {
+					fmt.Printf("finishing t %d\t\tpCount %d\t\t%v\n", t, pCount, time.Now())
+				}
 			}
 
 		}
 	}
-
+	headMax := 10
+	if len(finishing) < headMax {
+		headMax = len(finishing)
+	}
+	fmt.Printf("finishing head %v\n", finishing[:headMax])
+	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 	// set leader(i) := node s
 	// s is the leader of the DFS which first discovered that node. Not just it's parent, but the value from the outer loop.
 	// need this for the first pass? NO, only the second pass, it labels the SCC
@@ -142,6 +159,7 @@ func kosaraju(g map[int]*node) []int {
 	leaderCount := make(map[int]int)
 	finishedMap = make(map[int]struct{}, len(g))
 	t = 0
+	pCount = 0
 	for _, s := range finishing {
 		if !explored[s] {
 			continue
@@ -150,6 +168,7 @@ func kosaraju(g map[int]*node) []int {
 		processNext := make([]int, 0)
 		processNext = append(processNext, s)
 		for len(processNext) > 0 {
+			pCount++
 			debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := g[processNext[len(processNext)-1]]
 			if explored[n.ID] {
@@ -180,10 +199,14 @@ func kosaraju(g map[int]*node) []int {
 					leaderCount[sn.ID] = 1
 				}
 				t++
+				if t%5000 == 0 {
+					fmt.Printf("leader t %d\t\tpCount %d\t\t%v\n", t, pCount, time.Now())
+				}
 			}
 		}
 	}
 	// no need to hold all the leaders, just the counts
+	fmt.Printf("leaders finished\n")
 
 	sccCounts := make([]int, 0, len(leaderCount))
 	for _, v := range leaderCount {
@@ -194,13 +217,6 @@ func kosaraju(g map[int]*node) []int {
 	for len(sccCounts) < 5 {
 		sccCounts = append(sccCounts, 0)
 	}
-
-	headMax := 10
-	if len(finishing) < headMax {
-		headMax = len(finishing)
-	}
-	fmt.Printf("finishing head %v\n", finishing[:headMax])
-	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 
 	// sort.Sort(sort.IntSlice(leaders))
 	// fmt.Printf("leaders %v\n", leaders)
