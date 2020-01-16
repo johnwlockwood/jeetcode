@@ -21,8 +21,7 @@ func FiveLargestSCCs(edges [][]int) string {
 	// make a list of the counts ordered by largest to smallest
 	// take the first 5 and if that isn't 5, pad with zeros and join
 	// them into a comma separated string
-
-	g := makeAdjacencyList(edges)
+	g := makeReverseAdjacencyList(edges)
 
 	gl := make([]*Node, 0, len(g))
 	for _, n := range g {
@@ -46,9 +45,9 @@ func FiveLargestSCCs(edges [][]int) string {
 	return strings.Join(sccCountsStrs, ",")
 }
 
-func makeAdjacencyList(edges [][]int) map[int]*Node {
-	// makes double sided adjacency list, each node has both
-	// inbound and outbound
+func makeReverseAdjacencyList(edges [][]int) map[int]*Node {
+	// makes a reverse adjacency list, each node
+	// is given it's inbound nodes
 	al := make(map[int]*Node, 0)
 
 	for i := 0; i < len(edges); i++ {
@@ -69,8 +68,6 @@ func makeAdjacencyList(edges [][]int) map[int]*Node {
 		} else {
 			head = r
 		}
-		tail.Outbound = append(tail.Outbound, head)
-		tail.OutDegree++
 		head.Inbound = append(head.Inbound, tail)
 		head.InDegree++
 	}
@@ -143,11 +140,16 @@ func computeFinishOrder(g []*Node) []*Node {
 				finishedMap[n.ID] = struct{}{}
 			} else {
 				for _, v := range n.Inbound {
-					n.InDegree--
 					if _, ok := explored[v.ID]; !ok {
 						processNext = append(processNext, v)
 					}
+					// transpose graph
+					v.Outbound = append(v.Outbound, n)
+					v.OutDegree++
 				}
+				// These are not needed anymore.
+				n.InDegree = 0
+				n.Inbound = nil
 			}
 		}
 	}
