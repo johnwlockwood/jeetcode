@@ -278,7 +278,7 @@ func TestFiveLargestSCC68(t *testing.T) {
 func TestFiveLargestSCCA(t *testing.T) {
 
 	tests := map[string]string{
-		"SCC.txt": "1,2,3,4,5",
+		"SCC.txt": "434821,968,459,313,211",
 	}
 
 	r, err := zip.OpenReader("testdata/SCC.txt.zip")
@@ -303,9 +303,6 @@ func TestFiveLargestSCCA(t *testing.T) {
 		scanner := bufio.NewScanner(rc)
 		i := 0
 		for scanner.Scan() {
-			// if i > 300000 {
-			// 	break
-			// }
 			line := scanner.Text()
 			edgeStr := strings.Split(line, " ")
 			if len(edgeStr) < 2 {

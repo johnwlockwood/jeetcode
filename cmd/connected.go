@@ -38,7 +38,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		tests := map[string]string{
-			"SCC.txt": "1,2,3,4,5",
+			"SCC.txt": "434821,968,459,313,211",
 		}
 
 		r, err := zip.OpenReader("graphs/course/connected/testdata/SCC.txt.zip")

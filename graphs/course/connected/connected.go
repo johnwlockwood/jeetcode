@@ -13,6 +13,7 @@ import (
 // there are and 0 for the remaining terms. ie. if there are only two SCCs which are 10 and 5, output
 // 10,5,0,0,0
 
+// FiveLargestSCCs returns the counts of the five largest SCCs in the given graph
 func FiveLargestSCCs(edges [][]int) string {
 	// kosaraju should return a list of ints, each int is the SCC identity of a vertex.
 	// the size of each SCC is the number of ints with the identity.
@@ -81,10 +82,7 @@ func kosaraju(g map[int]*node) []int {
 	// mark i as explored
 	// for each arc
 	// make a stack and provide it with a starting node
-	x := 0
-	pCount := 0
 	for s, sn := range g {
-		x++
 		if explored[s] {
 			continue
 		}
@@ -93,7 +91,6 @@ func kosaraju(g map[int]*node) []int {
 		processNext = append(processNext, sn)
 
 		for len(processNext) > 0 {
-			pCount++
 			n := processNext[len(processNext)-1]
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
@@ -132,7 +129,6 @@ func kosaraju(g map[int]*node) []int {
 	leaderCount := make(map[int]int)
 	finishedMap = make(map[int]struct{}, len(g))
 	t = 0
-	pCount = 0
 	for _, sn := range finishing {
 		if !explored[sn.ID] {
 			continue
@@ -140,7 +136,6 @@ func kosaraju(g map[int]*node) []int {
 		processNext := make([]*node, 0)
 		processNext = append(processNext, sn)
 		for len(processNext) > 0 {
-			pCount++
 			n := processNext[len(processNext)-1]
 			if explored[n.ID] {
 				explored[n.ID] = false
