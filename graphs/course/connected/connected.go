@@ -113,7 +113,7 @@ func kosaraju(g map[int]*node) []int {
 
 		for len(processNext) > 0 {
 			pCount++
-			debug(fmt.Sprintf("pn: %v\n", processNext))
+			// debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := processNext[len(processNext)-1]
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
@@ -154,8 +154,8 @@ func kosaraju(g map[int]*node) []int {
 	if len(finishing) < headMax {
 		headMax = len(finishing)
 	}
-	fmt.Printf("finishing head %v\n", finishing[:headMax])
-	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
+	// fmt.Printf("finishing head %v\n", finishing[:headMax])
+	// fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 	// set leader(i) := node s
 	// s is the leader of the DFS which first discovered that node. Not just it's parent, but the value from the outer loop.
 	// need this for the first pass? NO, only the second pass, it labels the SCC
@@ -173,7 +173,7 @@ func kosaraju(g map[int]*node) []int {
 		processNext = append(processNext, sn)
 		for len(processNext) > 0 {
 			pCount++
-			debug(fmt.Sprintf("pn: %v\n", processNext))
+			// debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := processNext[len(processNext)-1]
 			if explored[n.ID] {
 				explored[n.ID] = false

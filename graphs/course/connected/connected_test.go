@@ -106,7 +106,7 @@ func TestFiveLargestSCCsmallGraph(t *testing.T) {
 func TestFiveLargestSCC29(t *testing.T) {
 
 	tests := map[string]string{
-		"input_mostlyCycles_29_800.txt": "606,166,17,8,3",
+		"input_mostlyCycles_29_800.txt": "606,166,17,8,2",
 	}
 
 	r, err := zip.OpenReader("testdata/input_mostlyCycles_29_800.txt.zip")

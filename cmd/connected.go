@@ -84,7 +84,7 @@ to quickly create a Cobra application.`,
 			got := connected.FiveLargestSCCs(edges)
 			fmt.Println(got)
 			if got != want {
-				fmt.Printf("for %s: got %v, want %v", f.Name, got, want)
+				fmt.Printf("for %s: got %v , want %v\n", f.Name, got, want)
 			}
 		}
 
