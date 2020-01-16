@@ -78,7 +78,7 @@ func makeReverseAdjacencyList(edges [][]int) map[int]*Node {
 // for finding the SCCs of a graph.
 func FindSCCLeaders(g []*Node) []*Leader {
 	finishing := computeFinishOrder(g)
-	return computeLeaders(finishing)
+	return computeLeaders(finishing[:])
 }
 
 // Node is suited for representing and traversing a graph of ints
