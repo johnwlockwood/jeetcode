@@ -5,7 +5,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 )
 
 // Given a list of edges of a directed graph, where the first item is the tail and the second the head,
@@ -37,9 +36,7 @@ func FiveLargestSCCs(edges [][]int) string {
 
 func makeAdjacencyList(edges [][]int) map[int]*node {
 	al := make(map[int]*node, 0)
-	ledges := len(edges)
 
-	fmt.Printf("edges %d, last edge: %v\n", ledges, edges[len(edges)-1])
 	for i := 0; i < len(edges); i++ {
 		nv := edges[i][0]
 		var tail, head *node
@@ -66,18 +63,6 @@ func makeAdjacencyList(edges [][]int) map[int]*node {
 	return al
 }
 
-var dEBUG = false
-
-func debug(s string) {
-	if dEBUG {
-		fmt.Printf("%s", s)
-	}
-}
-
-func kosaraju2(g map[int]*node) []int {
-	return []int{}
-}
-
 func kosaraju(g map[int]*node) []int {
 	// reverse graph
 	// call DFS from every vertex of the revese graph to compute the finishing position for each vertex
@@ -100,52 +85,37 @@ func kosaraju(g map[int]*node) []int {
 	pCount := 0
 	for s, sn := range g {
 		x++
-		if x%5000 == 0 {
-			fmt.Printf("x %d\t\t%v\n", x, time.Now())
-		}
 		if explored[s] {
 			continue
 		}
 
-		debug(fmt.Sprintf("next unexplored graph node: %d\n", s))
 		processNext := make([]*node, 0)
 		processNext = append(processNext, sn)
 
 		for len(processNext) > 0 {
 			pCount++
-			// debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := processNext[len(processNext)-1]
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
 			}
 
 			unexploredCount := 0
-			debug(fmt.Sprintf("adding inbound of %d: ", n.ID))
 
 			for _, v := range n.Inbound {
 				if !explored[v.ID] {
-					debug(fmt.Sprintf("%d ", v.ID))
 					processNext = append(processNext, v)
 					unexploredCount++
 				}
 			}
-			debug(fmt.Sprintf("\n"))
 			// no more unexplored inbound(rev of outbound)
 			if unexploredCount == 0 {
-				debug(fmt.Sprintf("finish %d at position %d\n", n.ID, t))
 				processNext = processNext[:len(processNext)-1]
-				if len(processNext) > 0 {
-					debug(fmt.Sprintf("backtracking to %d\n", processNext[len(processNext)-1].ID))
-				}
 				if _, ok := finishedMap[n.ID]; ok {
 					continue
 				}
 				t--
 				finishing[t] = n
 				finishedMap[n.ID] = struct{}{}
-				if t%5000 == 0 {
-					fmt.Printf("finishing t %d\t\tpCount %d\t\t%v\n", t, pCount, time.Now())
-				}
 			}
 
 		}
@@ -154,8 +124,6 @@ func kosaraju(g map[int]*node) []int {
 	if len(finishing) < headMax {
 		headMax = len(finishing)
 	}
-	// fmt.Printf("finishing head %v\n", finishing[:headMax])
-	// fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 	// set leader(i) := node s
 	// s is the leader of the DFS which first discovered that node. Not just it's parent, but the value from the outer loop.
 	// need this for the first pass? NO, only the second pass, it labels the SCC
@@ -173,25 +141,20 @@ func kosaraju(g map[int]*node) []int {
 		processNext = append(processNext, sn)
 		for len(processNext) > 0 {
 			pCount++
-			// debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := processNext[len(processNext)-1]
 			if explored[n.ID] {
 				explored[n.ID] = false
 			}
 			unexploredCount := 0
-			debug(fmt.Sprintf("adding outbound: "))
 			for _, v := range n.Outbound {
 				if explored[v.ID] {
-					debug(fmt.Sprintf("%d ", v.ID))
 					processNext = append(processNext, v)
 					unexploredCount++
 				}
 			}
-			debug(fmt.Sprintf("\n"))
 			// no more unexplored inbound(rev of outbound)
 			if unexploredCount == 0 {
 				processNext = processNext[:len(processNext)-1]
-				debug(fmt.Sprintf("leader of %d is %d\n", t, n.ID))
 				if _, ok := finishedMap[n.ID]; ok {
 					continue
 				}
@@ -203,14 +166,10 @@ func kosaraju(g map[int]*node) []int {
 					leaderCount[sn.ID] = 1
 				}
 				t++
-				if t%5000 == 0 {
-					fmt.Printf("leader t %d\t\tpCount %d\t\t%v\n", t, pCount, time.Now())
-				}
 			}
 		}
 	}
 	// no need to hold all the leaders, just the counts
-	fmt.Printf("leaders finished\n")
 
 	sccCounts := make([]int, 0, len(leaderCount))
 	for _, v := range leaderCount {
@@ -221,12 +180,6 @@ func kosaraju(g map[int]*node) []int {
 	for len(sccCounts) < 5 {
 		sccCounts = append(sccCounts, 0)
 	}
-
-	// sort.Sort(sort.IntSlice(leaders))
-	// fmt.Printf("leaders %v\n", leaders)
-
-	fmt.Printf("sccCounts %v\n", sccCounts[:5])
-
 	return sccCounts[:5]
 }
 
