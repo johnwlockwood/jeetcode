@@ -19,6 +19,9 @@ import (
 	"archive/zip"
 	"bufio"
 	"fmt"
+	"log"
+	"os"
+	"runtime/pprof"
 	"strconv"
 	"strings"
 
@@ -37,6 +40,18 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		cpuprofile, err := cmd.Flags().GetString("cpuprofile")
+		if err != nil {
+			log.Fatal(err)
+		}
+		if cpuprofile != "" {
+			f, err := os.Create(cpuprofile)
+			if err != nil {
+				log.Fatal(err)
+			}
+			pprof.StartCPUProfile(f)
+			defer pprof.StopCPUProfile()
+		}
 		tests := map[string]string{
 			"SCC.txt": "434821,968,459,313,211",
 		}
@@ -89,6 +104,16 @@ to quickly create a Cobra application.`,
 		}
 
 		fmt.Println("connected called")
+		memprofile, err := cmd.Flags().GetString("memprofile")
+		if memprofile != "" {
+			f, err := os.Create(memprofile)
+			if err != nil {
+				log.Fatal(err)
+			}
+			pprof.WriteHeapProfile(f)
+			f.Close()
+			return
+		}
 	},
 }
 
@@ -103,5 +128,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// connectedCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	connectedCmd.Flags().String("cpuprofile", "", "write cpu profile to file. View profile with go tool pprof -web <profile name>")
+	connectedCmd.Flags().String("memprofile", "", "write memory profile to file. View profile with go tool pprof -web <profile name>")
 }
