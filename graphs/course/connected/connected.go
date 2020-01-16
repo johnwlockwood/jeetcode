@@ -35,6 +35,9 @@ func fiveLargestSCCs(edges [][]int) string {
 
 func makeAdjacencyList(edges [][]int) map[int]*node {
 	al := make(map[int]*node, 0)
+	ledges := len(edges)
+
+	fmt.Printf("edges %d, last edge: %v\n", ledges, edges[len(edges)-1])
 	for i := 0; i < len(edges); i++ {
 		nv := edges[i][0]
 		var tail, head *node
@@ -54,10 +57,19 @@ func makeAdjacencyList(edges [][]int) map[int]*node {
 			head = r
 		}
 		tail.Outbound = append(tail.Outbound, head)
+		tail.OutboundCount++
 		head.Inbound = append(head.Inbound, tail)
 		head.InboundCount++
 	}
 	return al
+}
+
+var dEBUG = false
+
+func debug(s string) {
+	if dEBUG {
+		fmt.Printf("%s", s)
+	}
 }
 
 func kosaraju(g map[int]*node) []int {
@@ -69,6 +81,7 @@ func kosaraju(g map[int]*node) []int {
 	// track visited nodes
 	explored := make(map[int]bool, len(g))
 	finishing := make([]int, len(g))
+	finishedMap := make(map[int]struct{}, len(g))
 	// initialize finishing time to the len of g because we want to make the second pass
 	// from the lowest finishing time the the highest. the lecture labels them the opposite
 	// way and then says to go from highest to lowest.
@@ -81,32 +94,41 @@ func kosaraju(g map[int]*node) []int {
 		if explored[s] {
 			continue
 		}
+		debug(fmt.Sprintf("next unexplored graph node: %d\n", s))
 		processNext := make([]int, 0)
 		processNext = append(processNext, s)
 		for len(processNext) > 0 {
-			fmt.Printf("pn: %v\n", processNext)
+			debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := g[processNext[len(processNext)-1]]
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
 			}
 
 			unexploredCount := 0
-			fmt.Printf("adding inbound: ")
+			debug(fmt.Sprintf("adding inbound of %d: ", n.ID))
 
 			for _, v := range n.Inbound {
 				if !explored[v.ID] {
-					fmt.Printf("%d ", v.ID)
+					debug(fmt.Sprintf("%d ", v.ID))
 					processNext = append(processNext, v.ID)
 					unexploredCount++
 				}
 			}
-			fmt.Println("")
+			debug(fmt.Sprintf("\n"))
 			// no more unexplored inbound(rev of outbound)
 			if unexploredCount == 0 {
-				fmt.Printf("finish %d at position %d\n", n.ID, t)
+				debug(fmt.Sprintf("finish %d at position %d\n", n.ID, t))
+				processNext = processNext[:len(processNext)-1]
+				if len(processNext) > 0 {
+					debug(fmt.Sprintf("backtracking to %d\n", processNext[len(processNext)-1]))
+				}
+				if _, ok := finishedMap[n.ID]; ok {
+					continue
+				}
 				t--
 				finishing[t] = n.ID
-				processNext = processNext[:len(processNext)-1]
+				finishedMap[n.ID] = struct{}{}
+
 			}
 
 		}
@@ -118,6 +140,7 @@ func kosaraju(g map[int]*node) []int {
 	// considured  explored reversed, so if it is false, it's been explored
 	leaders := make([]int, len(g))
 	leaderCount := make(map[int]int)
+	finishedMap = make(map[int]struct{}, len(g))
 	t = 0
 	for _, s := range finishing {
 		if !explored[s] {
@@ -127,24 +150,29 @@ func kosaraju(g map[int]*node) []int {
 		processNext := make([]int, 0)
 		processNext = append(processNext, s)
 		for len(processNext) > 0 {
-			fmt.Printf("pn: %v\n", processNext)
+			debug(fmt.Sprintf("pn: %v\n", processNext))
 			n := g[processNext[len(processNext)-1]]
 			if explored[n.ID] {
 				explored[n.ID] = false
 			}
 			unexploredCount := 0
-			fmt.Printf("adding outbound: ")
+			debug(fmt.Sprintf("adding outbound: "))
 			for _, v := range n.Outbound {
 				if explored[v.ID] {
-					fmt.Printf("%d ", v.ID)
+					debug(fmt.Sprintf("%d ", v.ID))
 					processNext = append(processNext, v.ID)
 					unexploredCount++
 				}
 			}
-			fmt.Println("")
+			debug(fmt.Sprintf("\n"))
 			// no more unexplored inbound(rev of outbound)
 			if unexploredCount == 0 {
-				fmt.Printf("finish %d at position %d\n", n.ID, t)
+				processNext = processNext[:len(processNext)-1]
+				debug(fmt.Sprintf("leader of %d is %d\n", t, n.ID))
+				if _, ok := finishedMap[n.ID]; ok {
+					continue
+				}
+				finishedMap[n.ID] = struct{}{}
 				leaders[t] = sn.ID
 				if _, ok := leaderCount[sn.ID]; ok {
 					leaderCount[sn.ID]++
@@ -152,16 +180,16 @@ func kosaraju(g map[int]*node) []int {
 					leaderCount[sn.ID] = 1
 				}
 				t++
-				processNext = processNext[:len(processNext)-1]
 			}
 		}
 	}
+	// no need to hold all the leaders, just the counts
 
 	sccCounts := make([]int, 0, len(leaderCount))
 	for _, v := range leaderCount {
 		sccCounts = append(sccCounts, v)
 	}
-	sort.Ints(sccCounts)
+	sort.Sort(sort.Reverse(sort.IntSlice(sccCounts)))
 	// pad with zeros if less than 5
 	for len(sccCounts) < 5 {
 		sccCounts = append(sccCounts, 0)
@@ -174,9 +202,10 @@ func kosaraju(g map[int]*node) []int {
 	fmt.Printf("finishing head %v\n", finishing[:headMax])
 	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 
-	fmt.Printf("leaders %v\n", leaders)
+	sort.Sort(sort.IntSlice(leaders))
+	// fmt.Printf("leaders %v\n", leaders)
 
-	fmt.Printf("sccCounts %v\n", sccCounts)
+	fmt.Printf("sccCounts %v\n", sccCounts[:5])
 
 	return sccCounts[:5]
 }
@@ -188,5 +217,6 @@ type node struct {
 	Inbound  []*node
 	// inbound count
 	InboundCount int
-	Explored     bool
+	// outbound count
+	OutboundCount int
 }
