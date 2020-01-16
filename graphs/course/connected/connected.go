@@ -169,7 +169,10 @@ func computeLeaders(finishing []*Node) []*Leader {
 	// Compute leaders
 	// A leader of a node is the node which started the DFS and discovers it. A node will be taken
 	// from the finishing order and a DFS started, it will find all the nodes in it's SCC.
+
+	// Track which nodes have been seen while traversing the graph
 	seen := make(map[int]struct{}, len(finishing))
+	// Track which nodes had their post DFS step done. (It's leader count incremented in this case)
 	finished := make(map[int]struct{}, len(finishing))
 
 	leaders := make(byLeaderCount, 0)
