@@ -13,7 +13,7 @@ import (
 // there are and 0 for the remaining terms. ie. if there are only two SCCs which are 10 and 5, output
 // 10,5,0,0,0
 
-func fiveLargestSCCs(edges [][]int) string {
+func FiveLargestSCCs(edges [][]int) string {
 	// kosaraju should return a list of ints, each int is the SCC identity of a vertex.
 	// the size of each SCC is the number of ints with the identity.
 	// make a map of each identity to it's count
@@ -138,7 +138,7 @@ func kosaraju(g map[int]*node) []int {
 	// s is the leader of the DFS which first discovered that node. Not just it's parent, but the value from the outer loop.
 	// need this for the first pass? NO, only the second pass, it labels the SCC
 	// considured  explored reversed, so if it is false, it's been explored
-	leaders := make([]int, len(g))
+	// leaders := make([]int, len(g))
 	leaderCount := make(map[int]int)
 	finishedMap = make(map[int]struct{}, len(g))
 	t = 0
@@ -173,7 +173,7 @@ func kosaraju(g map[int]*node) []int {
 					continue
 				}
 				finishedMap[n.ID] = struct{}{}
-				leaders[t] = sn.ID
+				// leaders[t] = sn.ID
 				if _, ok := leaderCount[sn.ID]; ok {
 					leaderCount[sn.ID]++
 				} else {
@@ -202,7 +202,7 @@ func kosaraju(g map[int]*node) []int {
 	fmt.Printf("finishing head %v\n", finishing[:headMax])
 	fmt.Printf("finishing tail %v\n", finishing[len(finishing)-headMax:])
 
-	sort.Sort(sort.IntSlice(leaders))
+	// sort.Sort(sort.IntSlice(leaders))
 	// fmt.Printf("leaders %v\n", leaders)
 
 	fmt.Printf("sccCounts %v\n", sccCounts[:5])

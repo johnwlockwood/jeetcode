@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestFiveLargestSCCSmallGraph(t *testing.T) {
+func TestFiveLargestSCCsmallGraph(t *testing.T) {
 	type test struct {
 		name  string
 		input [][]int
@@ -96,14 +96,186 @@ func TestFiveLargestSCCSmallGraph(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			if got := fiveLargestSCCs(tc.input); got != tc.want {
+			if got := FiveLargestSCCs(tc.input); got != tc.want {
 				t.Errorf("got %s, want %s", got, tc.want)
 			}
 		})
 	}
 }
 
-func TestFiveLargestSCC(t *testing.T) {
+func TestFiveLargestSCC29(t *testing.T) {
+
+	tests := map[string]string{
+		"input_mostlyCycles_29_800.txt": "606,166,17,8,3",
+	}
+
+	r, err := zip.OpenReader("testdata/input_mostlyCycles_29_800.txt.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer r.Close()
+	for _, f := range r.File {
+		want, ok := tests[f.Name]
+		if !ok {
+			continue
+		}
+		fmt.Printf("Contents of %s:\n", f.Name)
+		rc, err := f.Open()
+		defer rc.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		edges := make([][]int, 0)
+
+		scanner := bufio.NewScanner(rc)
+		i := 0
+		for scanner.Scan() {
+			line := scanner.Text()
+			edgeStr := strings.Split(line, " ")
+			if len(edgeStr) < 2 {
+				t.Fatalf("bad data %s", line)
+				break
+			}
+			tail, err := strconv.Atoi(edgeStr[0])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+			head, err := strconv.Atoi(edgeStr[1])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+
+			edges = append(edges, []int{tail, head})
+			i++
+		}
+		t.Logf("there are %d edges and i == %d", len(edges), i)
+		fmt.Printf("there are %d edges and i == %d\n", len(edges), i)
+		got := FiveLargestSCCs(edges)
+		if got != want {
+			t.Errorf("for %s: got %v, want %v", f.Name, got, want)
+		}
+	}
+}
+
+func TestFiveLargestSCC60(t *testing.T) {
+
+	tests := map[string]string{
+		"input_mostlyCycles_60_80000.txt": "49989,22871,3431,2105,822",
+	}
+
+	r, err := zip.OpenReader("testdata/input_mostlyCycles_60_80000.txt.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer r.Close()
+	for _, f := range r.File {
+		want, ok := tests[f.Name]
+		if !ok {
+			continue
+		}
+		fmt.Printf("Contents of %s:\n", f.Name)
+		rc, err := f.Open()
+		defer rc.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		edges := make([][]int, 0)
+
+		scanner := bufio.NewScanner(rc)
+		i := 0
+		for scanner.Scan() {
+			line := scanner.Text()
+			edgeStr := strings.Split(line, " ")
+			if len(edgeStr) < 2 {
+				t.Fatalf("bad data %s", line)
+				break
+			}
+			tail, err := strconv.Atoi(edgeStr[0])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+			head, err := strconv.Atoi(edgeStr[1])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+
+			edges = append(edges, []int{tail, head})
+			i++
+		}
+		t.Logf("there are %d edges and i == %d", len(edges), i)
+		fmt.Printf("there are %d edges and i == %d\n", len(edges), i)
+		got := FiveLargestSCCs(edges)
+		if got != want {
+			t.Errorf("for %s: got %v, want %v", f.Name, got, want)
+		}
+	}
+}
+
+func TestFiveLargestSCC68(t *testing.T) {
+
+	tests := map[string]string{
+		"input_mostlyCycles_68_320000.txt": "271384,33830,9100,3102,850",
+	}
+
+	r, err := zip.OpenReader("testdata/input_mostlyCycles_68_320000.txt.zip")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer r.Close()
+	for _, f := range r.File {
+		want, ok := tests[f.Name]
+		if !ok {
+			continue
+		}
+		fmt.Printf("Contents of %s:\n", f.Name)
+		rc, err := f.Open()
+		defer rc.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		edges := make([][]int, 0)
+
+		scanner := bufio.NewScanner(rc)
+		i := 0
+		for scanner.Scan() {
+			line := scanner.Text()
+			edgeStr := strings.Split(line, " ")
+			if len(edgeStr) < 2 {
+				t.Fatalf("bad data %s", line)
+				break
+			}
+			tail, err := strconv.Atoi(edgeStr[0])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+			head, err := strconv.Atoi(edgeStr[1])
+			if err != nil {
+				t.Fatal(err)
+				break
+			}
+
+			edges = append(edges, []int{tail, head})
+			i++
+		}
+		t.Logf("there are %d edges and i == %d", len(edges), i)
+		fmt.Printf("there are %d edges and i == %d\n", len(edges), i)
+		got := FiveLargestSCCs(edges)
+		if got != want {
+			t.Errorf("for %s: got %v, want %v", f.Name, got, want)
+		}
+
+	}
+}
+
+func TestFiveLargestSCCA(t *testing.T) {
 
 	tests := map[string]string{
 		"SCC.txt": "1,2,3,4,5",
@@ -131,9 +303,9 @@ func TestFiveLargestSCC(t *testing.T) {
 		scanner := bufio.NewScanner(rc)
 		i := 0
 		for scanner.Scan() {
-			if i > 300000 {
-				break
-			}
+			// if i > 300000 {
+			// 	break
+			// }
 			line := scanner.Text()
 			edgeStr := strings.Split(line, " ")
 			if len(edgeStr) < 2 {
@@ -156,11 +328,10 @@ func TestFiveLargestSCC(t *testing.T) {
 		}
 		t.Logf("there are %d edges and i == %d", len(edges), i)
 		fmt.Printf("there are %d edges and i == %d\n", len(edges), i)
-		got := fiveLargestSCCs(edges)
+		got := FiveLargestSCCs(edges)
 		if got != want {
 			t.Errorf("for %s: got %v, want %v", f.Name, got, want)
 		}
 
 	}
-	t.Error("watt?")
 }
