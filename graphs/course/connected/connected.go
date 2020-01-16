@@ -113,13 +113,22 @@ func computeFinishOrder(g []*Node) []*Node {
 	// call DFS from every vertex of the reverse graph to compute the finishing position for each vertex
 	// call DFS from every vertex of the graph processed from highest to lowest finishing position
 	//  to compute the identity of each vertex's strongly connected component
-	explored := make(map[int]struct{}, len(g))
-	finishedMap := make(map[int]struct{}, len(g))
+
+	// Track which nodes have been seen while traversing the graph
+	seen := make(map[int]struct{}, len(g))
+	// Track which nodes have been added to the finishing order.
+	// Since this is iterative instead of recursive, it doesn't
+	// remove a node from the stack when first seen, only
+	// when all it's outbound(inbound in this case, since it is reversed)
+	// have been explored and it's
+	// been essentially backtracked to. A recursive process
+	// would deal with the post process after it's DFS had returned.
+	finished := make(map[int]struct{}, len(g))
 
 	finishing := make([]*Node, len(g))
 	t := len(g)
 	for _, sn := range g {
-		if _, ok := explored[sn.ID]; ok {
+		if _, ok := seen[sn.ID]; ok {
 			continue
 		}
 		processNext := make([]*Node, 0)
@@ -127,20 +136,20 @@ func computeFinishOrder(g []*Node) []*Node {
 
 		for len(processNext) > 0 {
 			n := processNext[len(processNext)-1]
-			if _, ok := explored[n.ID]; !ok {
-				explored[n.ID] = struct{}{}
+			if _, ok := seen[n.ID]; !ok {
+				seen[n.ID] = struct{}{}
 			}
 			if n.InDegree == 0 {
 				processNext = processNext[:len(processNext)-1]
-				if _, ok := finishedMap[n.ID]; ok {
+				if _, ok := finished[n.ID]; ok {
 					continue
 				}
 				t--
 				finishing[t] = n
-				finishedMap[n.ID] = struct{}{}
+				finished[n.ID] = struct{}{}
 			} else {
 				for _, v := range n.Inbound {
-					if _, ok := explored[v.ID]; !ok {
+					if _, ok := seen[v.ID]; !ok {
 						processNext = append(processNext, v)
 					}
 					// transpose graph
@@ -160,13 +169,13 @@ func computeLeaders(finishing []*Node) []*Leader {
 	// Compute leaders
 	// A leader of a node is the node which started the DFS and discovers it. A node will be taken
 	// from the finishing order and a DFS started, it will find all the nodes in it's SCC.
-	explored := make(map[int]struct{}, len(finishing))
-	leaderedMap := make(map[int]struct{}, len(finishing))
+	seen := make(map[int]struct{}, len(finishing))
+	finished := make(map[int]struct{}, len(finishing))
 
 	leaders := make(byLeaderCount, 0)
 
 	for _, sn := range finishing {
-		if _, ok := explored[sn.ID]; ok {
+		if _, ok := seen[sn.ID]; ok {
 			continue
 		}
 		leader := &Leader{
@@ -177,20 +186,20 @@ func computeLeaders(finishing []*Node) []*Leader {
 		processNext = append(processNext, sn)
 		for len(processNext) > 0 {
 			n := processNext[len(processNext)-1]
-			if _, ok := explored[n.ID]; !ok {
-				explored[n.ID] = struct{}{}
+			if _, ok := seen[n.ID]; !ok {
+				seen[n.ID] = struct{}{}
 			}
 			if n.OutDegree == 0 {
 				processNext = processNext[:len(processNext)-1]
-				if _, ok := leaderedMap[n.ID]; ok {
+				if _, ok := finished[n.ID]; ok {
 					continue
 				}
-				leaderedMap[n.ID] = struct{}{}
+				finished[n.ID] = struct{}{}
 				leader.Count++
 			} else {
 				for _, v := range n.Outbound {
 					n.OutDegree--
-					if _, ok := explored[v.ID]; !ok {
+					if _, ok := seen[v.ID]; !ok {
 						processNext = append(processNext, v)
 					}
 				}
