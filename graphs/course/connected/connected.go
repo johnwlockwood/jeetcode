@@ -38,9 +38,6 @@ func FiveLargestSCCs(edges [][]int) string {
 		counts[i] = leaders[i].Count
 	}
 
-	// fmt.Println("starting kosaraju")
-	// sccCounts := topSCCCounts(g, 5)
-
 	sccCountsStrs := make([]string, 0, 5)
 	for _, c := range counts {
 		sccCountsStrs = append(sccCountsStrs, strconv.Itoa(c))
@@ -71,18 +68,22 @@ func makeAdjacencyList(edges [][]int) map[int]*Node {
 			head = r
 		}
 		tail.Outbound = append(tail.Outbound, head)
-		tail.OutboundCount++
+		tail.OutDegree++
 		head.Inbound = append(head.Inbound, tail)
-		head.InboundCount++
+		head.InDegree++
 	}
 	return al
 }
 
-// FindSCCLeaders returns leaders in all the SCCs of the given graph
+// FindSCCLeaders returns leaders in all the SCCs of the given graph using kosaraju's algorithm
+// for finding the SCCs of a graph.
 func FindSCCLeaders(g []*Node) []*Leader {
 	explored := make(map[int]bool, len(g))
 
-	// compute finishing order
+	// Compute finishing order
+	// call DFS from every vertex of the reverse graph to compute the finishing position for each vertex
+	// call DFS from every vertex of the graph processed from highest to lowest finishing position
+	//  to compute the identity of each vertex's strongly connected component
 	finishing := make([]*Node, len(g))
 	finishedMap := make(map[int]bool, len(g))
 	t := len(g)
@@ -98,7 +99,7 @@ func FindSCCLeaders(g []*Node) []*Leader {
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
 			}
-			if n.InboundCount == 0 {
+			if n.InDegree == 0 {
 				processNext = processNext[:len(processNext)-1]
 				if _, ok := finishedMap[n.ID]; ok {
 					continue
@@ -111,13 +112,16 @@ func FindSCCLeaders(g []*Node) []*Leader {
 					if !explored[v.ID] {
 						processNext = append(processNext, v)
 					}
-					n.InboundCount--
+					n.InDegree--
 				}
 			}
 		}
 	}
 
-	// compute leaders
+	// Compute leaders
+	// A leader of a node is the node which started the DFS and discovers it. A node will be taken
+	// from the finishing order and a DFS started, it will find all the nodes in it's SCC.
+	// Consider explored reversed, so if it is false, it's been explored
 	leaders := make(byLeaderCount, 0)
 	for _, sn := range finishing {
 		if !explored[sn.ID] {
@@ -134,7 +138,7 @@ func FindSCCLeaders(g []*Node) []*Leader {
 			if explored[n.ID] {
 				explored[n.ID] = false
 			}
-			if n.OutboundCount == 0 {
+			if n.OutDegree == 0 {
 				processNext = processNext[:len(processNext)-1]
 				// use finishedMap in reverse and just check the value
 				// don't check if the key
@@ -149,120 +153,13 @@ func FindSCCLeaders(g []*Node) []*Leader {
 					if explored[v.ID] {
 						processNext = append(processNext, v)
 					}
-					n.OutboundCount--
+					n.OutDegree--
 				}
 			}
 		}
 	}
 	sort.Sort(sort.Reverse(leaders))
 	return leaders
-}
-
-func topSCCCounts(g map[int]*Node, topCount int) []int {
-	// kosaraju's algorithm for finding the strong components of a graph
-
-	// reverse graph
-	// call DFS from every vertex of the revese graph to compute the finishing position for each vertex
-	// call DFS from every vertex of the graph processed from highest to lowest finishing position
-	//  to compute the identity of each vertex's strongly connected component
-
-	// track visited nodes
-	explored := make(map[int]bool, len(g))
-	finishing := make([]*Node, len(g))
-	finishedMap := make(map[int]struct{}, len(g))
-	// initialize finishing time to the len of g because we want to make the second pass
-	// from the lowest finishing time the the highest. the lecture labels them the opposite
-	// way and then says to go from highest to lowest.
-	t := len(g)
-	//
-	// mark i as explored
-	// for each arc
-	// make a stack and provide it with a starting Node
-	for s, sn := range g {
-		if explored[s] {
-			continue
-		}
-
-		processNext := make([]*Node, 0)
-		processNext = append(processNext, sn)
-
-		for len(processNext) > 0 {
-			n := processNext[len(processNext)-1]
-			if ok := explored[n.ID]; !ok {
-				explored[n.ID] = true
-			}
-			if n.InboundCount == 0 {
-				processNext = processNext[:len(processNext)-1]
-				if _, ok := finishedMap[n.ID]; ok {
-					continue
-				}
-				t--
-				finishing[t] = n
-				finishedMap[n.ID] = struct{}{}
-			} else {
-				for _, v := range n.Inbound {
-					if !explored[v.ID] {
-						processNext = append(processNext, v)
-					}
-					n.InboundCount--
-				}
-			}
-		}
-	}
-	// set leader(i) := Node s
-	// s is the leader of the DFS which first discovered that Node. Not just it's parent, but the value from the outer loop.
-	// need this for the first pass? NO, only the second pass, it labels the SCC
-	// considured  explored reversed, so if it is false, it's been explored
-	// leaders := make([]int, len(g))
-	leaderCount := make(map[int]int)
-	finishedMap = make(map[int]struct{}, len(g))
-	// t = 0
-	for _, sn := range finishing {
-		if !explored[sn.ID] {
-			continue
-		}
-		processNext := make([]*Node, 0)
-		processNext = append(processNext, sn)
-		for len(processNext) > 0 {
-			n := processNext[len(processNext)-1]
-			if explored[n.ID] {
-				explored[n.ID] = false
-			}
-			if n.OutboundCount == 0 {
-				processNext = processNext[:len(processNext)-1]
-				if _, ok := finishedMap[n.ID]; ok {
-					continue
-				}
-				finishedMap[n.ID] = struct{}{}
-				// leaders[t] = sn.ID
-				if _, ok := leaderCount[sn.ID]; ok {
-					leaderCount[sn.ID]++
-				} else {
-					leaderCount[sn.ID] = 1
-				}
-				// t++
-			} else {
-				for _, v := range n.Outbound {
-					if explored[v.ID] {
-						processNext = append(processNext, v)
-					}
-					n.OutboundCount--
-				}
-			}
-		}
-	}
-	// no need to hold all the leaders, just the counts
-
-	sccCounts := make([]int, 0, len(leaderCount))
-	for _, v := range leaderCount {
-		sccCounts = append(sccCounts, v)
-	}
-	sort.Sort(sort.Reverse(sort.IntSlice(sccCounts)))
-	// pad with zeros if less than topCount
-	for len(sccCounts) < topCount {
-		sccCounts = append(sccCounts, 0)
-	}
-	return sccCounts[:topCount]
 }
 
 // Node is suited for representing and traversing a graph of ints
@@ -273,9 +170,9 @@ type Node struct {
 	Outbound []*Node
 	Inbound  []*Node
 	// inbound count
-	InboundCount int
+	InDegree int
 	// outbound count
-	OutboundCount int
+	OutDegree int
 }
 
 // Leader represents a node which should be a leader of an SCC and the SCC's count
