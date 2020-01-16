@@ -47,6 +47,8 @@ func FiveLargestSCCs(edges [][]int) string {
 }
 
 func makeAdjacencyList(edges [][]int) map[int]*Node {
+	// makes double sided adjacency list, each node has both
+	// inbound and outbound
 	al := make(map[int]*Node, 0)
 
 	for i := 0; i < len(edges); i++ {
