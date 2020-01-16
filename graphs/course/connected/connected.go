@@ -78,88 +78,8 @@ func makeAdjacencyList(edges [][]int) map[int]*Node {
 // FindSCCLeaders returns leaders in all the SCCs of the given graph using kosaraju's algorithm
 // for finding the SCCs of a graph.
 func FindSCCLeaders(g []*Node) []*Leader {
-	explored := make(map[int]bool, len(g))
-
-	// Compute finishing order
-	// call DFS from every vertex of the reverse graph to compute the finishing position for each vertex
-	// call DFS from every vertex of the graph processed from highest to lowest finishing position
-	//  to compute the identity of each vertex's strongly connected component
-	finishing := make([]*Node, len(g))
-	finishedMap := make(map[int]bool, len(g))
-	t := len(g)
-	for _, sn := range g {
-		if explored[sn.ID] {
-			continue
-		}
-		processNext := make([]*Node, 0)
-		processNext = append(processNext, sn)
-
-		for len(processNext) > 0 {
-			n := processNext[len(processNext)-1]
-			if ok := explored[n.ID]; !ok {
-				explored[n.ID] = true
-			}
-			if n.InDegree == 0 {
-				processNext = processNext[:len(processNext)-1]
-				if _, ok := finishedMap[n.ID]; ok {
-					continue
-				}
-				t--
-				finishing[t] = n
-				finishedMap[n.ID] = true
-			} else {
-				for _, v := range n.Inbound {
-					if !explored[v.ID] {
-						processNext = append(processNext, v)
-					}
-					n.InDegree--
-				}
-			}
-		}
-	}
-
-	// Compute leaders
-	// A leader of a node is the node which started the DFS and discovers it. A node will be taken
-	// from the finishing order and a DFS started, it will find all the nodes in it's SCC.
-	// Consider explored reversed, so if it is false, it's been explored
-	leaders := make(byLeaderCount, 0)
-	for _, sn := range finishing {
-		if !explored[sn.ID] {
-			continue
-		}
-		leader := &Leader{
-			Node: sn,
-		}
-		leaders = append(leaders, leader)
-		processNext := make([]*Node, 0)
-		processNext = append(processNext, sn)
-		for len(processNext) > 0 {
-			n := processNext[len(processNext)-1]
-			if explored[n.ID] {
-				explored[n.ID] = false
-			}
-			if n.OutDegree == 0 {
-				processNext = processNext[:len(processNext)-1]
-				// use finishedMap in reverse and just check the value
-				// don't check if the key
-				// exists, because the finish ordering filled them all in
-				if ok := finishedMap[n.ID]; !ok {
-					continue
-				}
-				finishedMap[n.ID] = false
-				leader.Count++
-			} else {
-				for _, v := range n.Outbound {
-					if explored[v.ID] {
-						processNext = append(processNext, v)
-					}
-					n.OutDegree--
-				}
-			}
-		}
-	}
-	sort.Sort(sort.Reverse(leaders))
-	return leaders
+	finishing := computeFinishOrder(g)
+	return computeLeaders(finishing)
 }
 
 // Node is suited for representing and traversing a graph of ints
@@ -187,4 +107,92 @@ func (a byLeaderCount) Len() int      { return len(a) }
 func (a byLeaderCount) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a byLeaderCount) Less(i, j int) bool {
 	return a[i].Count < a[j].Count
+}
+
+func computeFinishOrder(g []*Node) []*Node {
+	// Compute finishing order
+	// call DFS from every vertex of the reverse graph to compute the finishing position for each vertex
+	// call DFS from every vertex of the graph processed from highest to lowest finishing position
+	//  to compute the identity of each vertex's strongly connected component
+	explored := make(map[int]struct{}, len(g))
+	finishedMap := make(map[int]struct{}, len(g))
+
+	finishing := make([]*Node, len(g))
+	t := len(g)
+	for _, sn := range g {
+		if _, ok := explored[sn.ID]; ok {
+			continue
+		}
+		processNext := make([]*Node, 0)
+		processNext = append(processNext, sn)
+
+		for len(processNext) > 0 {
+			n := processNext[len(processNext)-1]
+			if _, ok := explored[n.ID]; !ok {
+				explored[n.ID] = struct{}{}
+			}
+			if n.InDegree == 0 {
+				processNext = processNext[:len(processNext)-1]
+				if _, ok := finishedMap[n.ID]; ok {
+					continue
+				}
+				t--
+				finishing[t] = n
+				finishedMap[n.ID] = struct{}{}
+			} else {
+				for _, v := range n.Inbound {
+					n.InDegree--
+					if _, ok := explored[v.ID]; !ok {
+						processNext = append(processNext, v)
+					}
+				}
+			}
+		}
+	}
+	return finishing
+}
+
+func computeLeaders(finishing []*Node) []*Leader {
+	// Compute leaders
+	// A leader of a node is the node which started the DFS and discovers it. A node will be taken
+	// from the finishing order and a DFS started, it will find all the nodes in it's SCC.
+	explored := make(map[int]struct{}, len(finishing))
+	leaderedMap := make(map[int]struct{}, len(finishing))
+
+	leaders := make(byLeaderCount, 0)
+
+	for _, sn := range finishing {
+		if _, ok := explored[sn.ID]; ok {
+			continue
+		}
+		leader := &Leader{
+			Node: sn,
+		}
+		leaders = append(leaders, leader)
+		processNext := make([]*Node, 0)
+		processNext = append(processNext, sn)
+		for len(processNext) > 0 {
+			n := processNext[len(processNext)-1]
+			if _, ok := explored[n.ID]; !ok {
+				explored[n.ID] = struct{}{}
+			}
+			if n.OutDegree == 0 {
+				processNext = processNext[:len(processNext)-1]
+				if _, ok := leaderedMap[n.ID]; ok {
+					continue
+				}
+				leaderedMap[n.ID] = struct{}{}
+				leader.Count++
+			} else {
+				for _, v := range n.Outbound {
+					n.OutDegree--
+					if _, ok := explored[v.ID]; !ok {
+						processNext = append(processNext, v)
+					}
+				}
+			}
+		}
+	}
+	sort.Sort(sort.Reverse(leaders))
+	return leaders
 }
