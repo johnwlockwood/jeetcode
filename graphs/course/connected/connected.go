@@ -95,17 +95,7 @@ func kosaraju(g map[int]*node) []int {
 			if ok := explored[n.ID]; !ok {
 				explored[n.ID] = true
 			}
-
-			unexploredCount := 0
-
-			for _, v := range n.Inbound {
-				if !explored[v.ID] {
-					processNext = append(processNext, v)
-					unexploredCount++
-				}
-			}
-			// no more unexplored inbound(rev of outbound)
-			if unexploredCount == 0 {
+			if n.InboundCount == 0 {
 				processNext = processNext[:len(processNext)-1]
 				if _, ok := finishedMap[n.ID]; ok {
 					continue
@@ -113,8 +103,14 @@ func kosaraju(g map[int]*node) []int {
 				t--
 				finishing[t] = n
 				finishedMap[n.ID] = struct{}{}
+			} else {
+				for _, v := range n.Inbound {
+					if !explored[v.ID] {
+						processNext = append(processNext, v)
+					}
+					n.InboundCount--
+				}
 			}
-
 		}
 	}
 	headMax := 10
@@ -140,27 +136,25 @@ func kosaraju(g map[int]*node) []int {
 			if explored[n.ID] {
 				explored[n.ID] = false
 			}
-			unexploredCount := 0
-			for _, v := range n.Outbound {
-				if explored[v.ID] {
-					processNext = append(processNext, v)
-					unexploredCount++
-				}
-			}
-			// no more unexplored inbound(rev of outbound)
-			if unexploredCount == 0 {
+			if n.OutboundCount == 0 {
 				processNext = processNext[:len(processNext)-1]
 				if _, ok := finishedMap[n.ID]; ok {
 					continue
 				}
 				finishedMap[n.ID] = struct{}{}
-				// leaders[t] = sn.ID
 				if _, ok := leaderCount[sn.ID]; ok {
 					leaderCount[sn.ID]++
 				} else {
 					leaderCount[sn.ID] = 1
 				}
 				t++
+			} else {
+				for _, v := range n.Outbound {
+					if explored[v.ID] {
+						processNext = append(processNext, v)
+					}
+					n.OutboundCount--
+				}
 			}
 		}
 	}
