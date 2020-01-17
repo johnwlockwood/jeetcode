@@ -116,14 +116,13 @@ func computeFinishOrder(g []*Node) []*Node {
 
 	// Track which nodes have been seen while traversing the graph
 	seen := make(map[int]struct{}, len(g))
-	// Track which nodes have been added to the finishing order.
-	// Since this is iterative instead of recursive, it doesn't
-	// remove a node from the stack when first seen, only
-	// when all it's outbound(inbound in this case, since it is reversed)
-	// have been explored and it's
-	// been essentially backtracked to. A recursive process
-	// would deal with the post process after it's DFS had returned.
-	finished := make(map[int]struct{}, len(g))
+
+	// The pseudocode for iterative DFS in Algorithms Illuminated
+	// says to mark a vertex explored after popping it from the stack,
+	// But doing that is a problem for this algorithm where you post process
+	// the node after it's DFS is done. It works more smoothly by marking
+	// explored/seen before putting it on the stack and only DFS
+	// on unseen.
 
 	finishing := make([]*Node, len(g))
 	t := len(g)
@@ -131,34 +130,30 @@ func computeFinishOrder(g []*Node) []*Node {
 		if _, ok := seen[sn.ID]; ok {
 			continue
 		}
+
+		seen[sn.ID] = struct{}{}
 		processNext := make([]*Node, 0)
 		processNext = append(processNext, sn)
 
 		for len(processNext) > 0 {
 			n := processNext[len(processNext)-1]
-			if _, ok := seen[n.ID]; !ok {
-				seen[n.ID] = struct{}{}
-			}
-			if n.InDegree == 0 {
-				processNext = processNext[:len(processNext)-1]
-				if _, ok := finished[n.ID]; ok {
-					continue
+			for _, v := range n.Inbound {
+				if _, ok := seen[v.ID]; !ok {
+					seen[v.ID] = struct{}{}
+					processNext = append(processNext, v)
 				}
+				// transpose graph
+				v.Outbound = append(v.Outbound, n)
+				v.OutDegree++
+			}
+			// These are not needed anymore.
+			n.InDegree = 0
+			n.Inbound = nil
+
+			if n.ID == processNext[len(processNext)-1].ID {
+				processNext = processNext[:len(processNext)-1]
 				t--
 				finishing[t] = n
-				finished[n.ID] = struct{}{}
-			} else {
-				for _, v := range n.Inbound {
-					if _, ok := seen[v.ID]; !ok {
-						processNext = append(processNext, v)
-					}
-					// transpose graph
-					v.Outbound = append(v.Outbound, n)
-					v.OutDegree++
-				}
-				// These are not needed anymore.
-				n.InDegree = 0
-				n.Inbound = nil
 			}
 		}
 	}
@@ -172,8 +167,6 @@ func computeLeaders(finishing []*Node) []*Leader {
 
 	// Track which nodes have been seen while traversing the graph
 	seen := make(map[int]struct{}, len(finishing))
-	// Track which nodes had their post DFS step done. (It's leader count incremented in this case)
-	finished := make(map[int]struct{}, len(finishing))
 
 	leaders := make(byLeaderCount, 0)
 
@@ -181,6 +174,7 @@ func computeLeaders(finishing []*Node) []*Leader {
 		if _, ok := seen[sn.ID]; ok {
 			continue
 		}
+		seen[sn.ID] = struct{}{}
 		leader := &Leader{
 			Node: sn,
 		}
@@ -189,23 +183,15 @@ func computeLeaders(finishing []*Node) []*Leader {
 		processNext = append(processNext, sn)
 		for len(processNext) > 0 {
 			n := processNext[len(processNext)-1]
-			if _, ok := seen[n.ID]; !ok {
-				seen[n.ID] = struct{}{}
+			for _, v := range n.Outbound {
+				if _, ok := seen[v.ID]; !ok {
+					seen[v.ID] = struct{}{}
+					processNext = append(processNext, v)
+				}
 			}
-			if n.OutDegree == 0 {
+			if n.ID == processNext[len(processNext)-1].ID {
 				processNext = processNext[:len(processNext)-1]
-				if _, ok := finished[n.ID]; ok {
-					continue
-				}
-				finished[n.ID] = struct{}{}
 				leader.Count++
-			} else {
-				for _, v := range n.Outbound {
-					n.OutDegree--
-					if _, ok := seen[v.ID]; !ok {
-						processNext = append(processNext, v)
-					}
-				}
 			}
 		}
 	}
