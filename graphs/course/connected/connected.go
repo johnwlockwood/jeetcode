@@ -150,7 +150,7 @@ func computeFinishOrder(g []*Node) []*Node {
 			n.InDegree = 0
 			n.Inbound = nil
 
-			if n.ID == processNext[len(processNext)-1].ID {
+			if n == processNext[len(processNext)-1] {
 				processNext = processNext[:len(processNext)-1]
 				t--
 				finishing[t] = n
@@ -189,7 +189,7 @@ func computeLeaders(finishing []*Node) []*Leader {
 					processNext = append(processNext, v)
 				}
 			}
-			if n.ID == processNext[len(processNext)-1].ID {
+			if n == processNext[len(processNext)-1] {
 				processNext = processNext[:len(processNext)-1]
 				leader.Count++
 			}
