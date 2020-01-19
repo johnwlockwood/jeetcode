@@ -11,6 +11,16 @@ func TestCountInversions(t *testing.T) {
 
 	tests := []test{
 		{
+			name:  "even five inversions with left and right in order",
+			input: []int{1, 5, 7, 2, 3, 6},
+			want:  5,
+		},
+		{
+			name:  "even two inversions",
+			input: []int{1, 2, 4, 5, 3, 6},
+			want:  2,
+		},
+		{
 			name:  "even no inversions",
 			input: []int{1, 2, 3, 4, 5, 6, 7, 8},
 			want:  0,

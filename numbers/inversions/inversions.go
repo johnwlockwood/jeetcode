@@ -38,7 +38,21 @@ func mergeAndCountSplitInv(left, right []int) ([]int, int) {
 		default:
 			sortedNums[k] = right[j]
 			j++
-			splitInv += n/2 - i
+			// if the number on the left is greater than the one on the right,
+			// then number of inversions are the number of remaining items
+			// on the left.  [1, 2, 4] 		[3, 5, 6]
+			//						i=2		 j=0
+			// so, 3-2 = 1
+			// example #2
+			// left: [14108 54044 79294], i: 1, right [25260 29649 60660], j: 1
+			//				i=1							   	 j=1
+			// 3-1 = 2
+			//				i=1							   	 	   j=2
+			// 3-1 = 2
+			//					  i=2							   j=2
+			// 3-2 = 1
+			// totaling 5
+			splitInv += len(left) - i
 		}
 	}
 	return sortedNums, splitInv
