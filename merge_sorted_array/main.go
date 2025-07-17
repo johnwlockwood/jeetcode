@@ -61,5 +61,14 @@ func mergeSolution3(nums1 []int, m int, nums2 []int, n int) {
 }
 
 func main() {
-	fmt.Printf("%v\n", binarySearch([]int{3, 8, 9}, 7, 0, 3))
+	fmt.Printf("binary search result: %v\n", binarySearch([]int{3, 8, 9}, 7, 0, 3))
+	nums1 := []int{1, 2, 3, 0, 0, 0}
+	nums2 := []int{2, 5, 6}
+	fmt.Printf("nums1: %v, nums2: %v\n", nums1, nums2)
+	merge(nums1, 3, nums2, 3)
+	fmt.Printf("merge result: %v\n", nums1)
+	nums1 = []int{1, 2, 3, 0, 0, 0}
+	nums2 = []int{2, 5, 6}
+	mergeSolution3(nums1, 3, nums2, 3)
+	fmt.Printf("merge3 result: %v\n", nums1)
 }
